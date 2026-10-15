@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Roya 앱 프로토타입</title>
+<meta name="theme-color" content="#0b1124">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23101830'/%3E%3Cpath d='M38 16A18 18 0 1 1 38 48A20 20 0 0 0 38 16Z' fill='%23e5d1a0'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,300;1,9..144,400&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#101830; --depth:#182341; --haze:#2b3759; --haze-soft:#223052;
+  --moon:#ece7d9; --moon-dim:#b7b3a8; --lilac:#b9b4f3; --lilac-deep:#8b85d9; --gold:#e5d1a0;
+  --danger:#f0a8a8; --ok:#a9d8b8;
+  --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --serif:"Fraunces","Iowan Old Style",Georgia,serif;
+  --stage:#0b1124;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--stage); color:var(--moon);
+  font-family:var(--sans); font-size:16px; line-height:1.6; word-break:keep-all;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:var(--sans)}
+:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+
+/* ---------- stage (desktop) ---------- */
+.stage{
+  min-height:100%; display:grid; grid-template-columns:1fr; align-items:center; justify-items:center;
+  padding:0; gap:32px;
+}
+.side{display:none; max-width:280px; color:var(--moon-dim); font-size:14px}
+.side h1{font-family:var(--serif); font-style:italic; font-weight:300; font-size:30px; color:var(--moon); margin:0 0 6px}
+.side p{margin:0 0 18px}
+.side ol{margin:0; padding:0; list-style:none; counter-reset:s}
+.side li{counter-increment:s}
+.side button{
+  display:flex; gap:10px; width:100%; text-align:left; background:none; border:0; color:var(--moon-dim);
+  padding:8px 10px; border-radius:8px; cursor:pointer; font-size:14px; min-height:40px; align-items:center;
+}
+.side button::before{content:counter(s); font-family:var(--serif); color:var(--lilac); width:14px}
+.side button:hover{background:var(--depth); color:var(--moon)}
+.side button[aria-current="true"]{background:var(--depth); color:var(--moon)}
+@media (min-width:860px){
+  .stage{grid-template-columns:280px 390px; justify-content:center; padding:40px; gap:56px}
+  .side{display:block}
+}
+
+/* ---------- phone ---------- */
+.phone{
+  position:relative; width:100%; height:100vh; height:100dvh; background:var(--night);
+  overflow:hidden; display:flex; flex-direction:column;
+}
+@media (min-width:860px){
+  .phone{
+    width:390px; height:844px; border-radius:44px;
+    box-shadow:0 0 0 10px #1c2340, 0 0 0 12px #0a0f20, 0 40px 80px rgba(0,0,0,.55);
+  }
+}
+.proto{
+  flex:none; background:var(--gold); color:var(--night); font-size:12px; font-weight:500;
+  text-align:center; padding:6px 12px; letter-spacing:.02em;
+}
+@media (min-width:860px){ .proto{padding-top:14px} .toast{top:60px} }
+.screen{
+  display:none; flex:1; min-height:0; flex-direction:column; overflow:hidden;
+}
+.screen[data-active]{display:flex}
+.scroll{flex:1; min-height:0; overflow-y:auto; padding:20px 22px 28px; -webkit-overflow-scrolling:touch}
+.scroll::-webkit-scrollbar{width:0}
+.bar{display:flex; align-items:center; justify-content:space-between; padding:12px 18px 0; min-height:48px; font-size:14px; color:var(--moon-dim)}
+.bar .back{background:none; border:0; color:var(--moon-dim); font-size:15px; padding:8px 4px; min-height:44px; cursor:pointer; display:inline-flex; align-items:center; gap:4px}
+.bar .back:hover{color:var(--moon)}
+.bar .step{font-family:var(--serif); font-style:italic; color:var(--lilac)}
+h2{font-size:24px; font-weight:500; line-height:1.3; margin:8px 0 8px}
+.lede{color:var(--moon-dim); margin:0 0 22px; font-size:15px}
+.brandrow{display:flex; align-items:center; gap:10px; font-family:var(--serif); font-style:italic; font-size:22px; margin:6px 0 18px}
+.brandrow svg{width:28px; height:28px}
+
+/* buttons */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; width:100%;
+  min-height:52px; padding:12px 18px; border-radius:14px; font-size:16px; font-weight:500;
+  background:var(--lilac); color:var(--night); border:1px solid var(--lilac); cursor:pointer;
+  transition:background .15s, opacity .15s;
+}
+.btn:hover{background:var(--moon); border-color:var(--moon)}
+.btn[disabled]{opacity:.4; cursor:not-allowed}
+.btn.ghost{background:transparent; color:var(--lilac)}
+.btn.ghost:hover{background:rgba(185,180,243,.12); color:var(--moon)}
+.btn.quiet{background:var(--depth); color:var(--moon); border-color:var(--haze)}
+.btn.quiet:hover{border-color:var(--lilac)}
+.btn.danger{background:transparent; color:var(--danger); border-color:rgba(240,168,168,.5)}
+.btn.danger:hover{background:rgba(240,168,168,.1)}
+.footer-act{flex:none; padding:14px 22px calc(18px + env(safe-area-inset-bottom)); border-top:1px solid var(--haze-soft); background:var(--night); display:grid; gap:10px}
+
+/* onboarding principles */
+.rules{list-style:none; margin:0; padding:0}
+.rules li{padding:16px 0; border-top:1px solid var(--haze-soft)}
+.rules li:last-child{border-bottom:1px solid var(--haze-soft)}
+.rules label{display:flex; gap:14px; align-items:flex-start; cursor:pointer}
+.rules input{width:22px; height:22px; margin:4px 0 0; accent-color:var(--lilac); flex:none}
+.rules b{display:block; font-weight:500; font-size:16px}
+.rules small{display:block; font-family:var(--serif); font-style:italic; color:var(--lilac); font-size:14px; margin-bottom:2px}
+.rules span{color:var(--moon-dim); font-size:14px; display:block}
+.fine{font-size:13px; color:var(--moon-dim); margin-top:16px}
+
+/* devices */
+.dev{display:flex; align-items:center; gap:14px; padding:16px 0; border-top:1px solid var(--haze-soft)}
+.dev:last-of-type{border-bottom:1px solid var(--haze-soft)}
+.dev .ico{width:48px; height:48px; border-radius:14px; background:var(--depth); display:grid; place-items:center; flex:none}
+.dev .ico svg{width:24px; height:24px; stroke:var(--lilac); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round}
+.dev .txt{flex:1; min-width:0}
+.dev .txt b{display:block; font-weight:500}
+.dev .txt span{display:block; font-size:13px; color:var(--moon-dim)}
+.dev .txt span[data-state="busy"]{color:var(--gold)}
+.dev .txt span[data-state="on"]{color:var(--ok)}
+.dev button{
+  min-height:40px; padding:6px 14px; border-radius:999px; font-size:14px; font-weight:500;
+  background:transparent; color:var(--lilac); border:1px solid var(--lilac); cursor:pointer;
+}
+.dev button[data-done]{color:var(--ok); border-color:transparent; background:rgba(169,216,184,.12); cursor:default}
+.dev button[disabled]:not([data-done]){opacity:.5}
+
+/* settings (pre-sleep) */
+.block{padding:18px 0; border-top:1px solid var(--haze-soft)}
+.block:last-of-type{border-bottom:1px solid var(--haze-soft)}
+.block h3{font-size:16px; font-weight:500; margin:0 0 4px}
+.block .hint{font-size:13px; color:var(--moon-dim); margin:0 0 12px}
+.strength{display:grid; gap:8px}
+.strength output{font-family:var(--serif); font-style:italic; font-size:26px; color:var(--lilac); line-height:1}
+.strength output small{font-family:var(--sans); font-style:normal; font-size:14px; color:var(--moon-dim); margin-left:8px}
+input[type=range]{width:100%; height:44px; margin:0; accent-color:var(--lilac); background:transparent}
+.ticks{display:flex; justify-content:space-between; font-size:12px; color:var(--moon-dim); padding:0 2px}
+.row{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
+.row + .row{border-top:1px dashed var(--haze-soft)}
+.row b{font-weight:400; display:block}
+.row span{display:block; font-size:13px; color:var(--moon-dim)}
+.sw{
+  position:relative; width:52px; height:32px; flex:none; border-radius:999px; border:1px solid var(--haze);
+  background:var(--depth); cursor:pointer; padding:0; transition:background .15s;
+}
+.sw::after{content:""; position:absolute; top:3px; left:3px; width:24px; height:24px; border-radius:50%; background:var(--moon-dim); transition:transform .15s, background .15s}
+.sw[aria-checked="true"]{background:var(--lilac-deep); border-color:var(--lilac-deep)}
+.sw[aria-checked="true"]::after{transform:translateX(20px); background:var(--moon)}
+.sw.off-tonight[aria-checked="true"]{background:var(--gold); border-color:var(--gold)}
+.sw.off-tonight[aria-checked="true"]::after{background:var(--night)}
+.summary{margin-top:18px; padding:14px 16px; border-radius:12px; background:var(--depth); font-size:14px; color:var(--moon-dim)}
+.summary b{color:var(--moon); font-weight:500}
+
+/* sleeping */
+.sleep{background:#070b18; justify-content:space-between; align-items:center; text-align:center}
+.sleep .time{font-family:var(--serif); font-weight:300; font-size:64px; letter-spacing:-.02em; color:#9a97a8; margin-top:18vh; line-height:1}
+.sleep .status{color:#6f6d7c; font-size:15px; margin-top:14px; line-height:1.8}
+.sleep .status b{display:block; color:#8c89a0; font-weight:400}
+.sleep .orb{width:14px; height:14px; border-radius:50%; background:var(--lilac-deep); margin:28px auto 0; opacity:.6; animation:slow 8s ease-in-out infinite}
+@keyframes slow{0%,100%{transform:scale(.8); opacity:.4} 50%{transform:scale(1.2); opacity:.8}}
+@media (prefers-reduced-motion:reduce){ .sleep .orb{animation:none} }
+.stop{
+  width:164px; height:164px; border-radius:50%; border:1px solid #2a2f48; background:#10152a; color:#c9c6d6;
+  font-size:22px; font-weight:500; cursor:pointer; margin-bottom:26px;
+  box-shadow:0 0 0 14px rgba(185,180,243,.04);
+}
+.stop:hover{background:#171d36; color:var(--moon)}
+.sleep .sub{color:#55546a; font-size:13px; margin:0 0 calc(24px + env(safe-area-inset-bottom))}
+.sleep .sub button{background:none; border:0; color:#6f6d7c; text-decoration:underline; text-underline-offset:3px; cursor:pointer; font-size:13px; padding:8px}
+
+/* report */
+.kpis{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:0 0 18px}
+.kpi{padding:14px 16px; border-radius:12px; background:var(--depth)}
+.kpi b{display:block; font-family:var(--serif); font-weight:400; font-size:28px; line-height:1.1; color:var(--moon)}
+.kpi span{font-size:13px; color:var(--moon-dim)}
+.chart{margin:4px 0 6px}
+.chart svg{width:100%; height:auto; display:block}
+.legend{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:var(--moon-dim); margin:8px 0 18px}
+.legend i{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:6px; vertical-align:-1px}
+.example{font-size:12px; color:var(--gold); margin:0 0 6px}
+.events{list-style:none; margin:0 0 20px; padding:0; font-size:14px}
+.events li{display:flex; justify-content:space-between; padding:9px 0; border-top:1px solid var(--haze-soft); color:var(--moon-dim)}
+.events li b{color:var(--moon); font-weight:400}
+.fb{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px}
+.fb button{
+  min-height:56px; border-radius:12px; border:1px solid var(--haze); background:var(--depth); color:var(--moon);
+  font-size:15px; cursor:pointer; display:grid; place-items:center; gap:2px; padding:8px 4px;
+}
+.fb button small{font-size:18px; line-height:1}
+.fb button[aria-pressed="true"]{border-color:var(--lilac); background:rgba(185,180,243,.14); color:var(--moon)}
+.fb-note{font-size:13px; color:var(--moon-dim); margin-top:10px; min-height:1.4em}
+
+/* data */
+.pill{display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:999px; background:rgba(169,216,184,.12); color:var(--ok); font-size:13px; margin-bottom:16px}
+.pill i{width:8px; height:8px; border-radius:50%; background:var(--ok)}
+.list{list-style:none; margin:0 0 20px; padding:0}
+.list li{display:flex; justify-content:space-between; gap:12px; padding:12px 0; border-top:1px solid var(--haze-soft); font-size:15px}
+.list li:last-child{border-bottom:1px solid var(--haze-soft)}
+.list li span{color:var(--moon-dim); font-size:14px; text-align:right}
+.msg{font-size:13px; color:var(--moon-dim); min-height:1.4em; margin-top:10px}
+.msg.ok{color:var(--ok)}
+
+/* bottom nav */
+.tabs{flex:none; display:flex; border-top:1px solid var(--haze-soft); background:var(--night); padding-bottom:env(safe-area-inset-bottom)}
+.tabs button{
+  flex:1; min-height:56px; background:none; border:0; color:var(--moon-dim); font-size:12px; cursor:pointer;
+  display:grid; place-items:center; gap:2px; padding:8px 0;
+}
+.tabs button svg{width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round}
+.tabs button[aria-current="true"]{color:var(--lilac)}
+
+/* modal */
+.modal{position:absolute; inset:0; background:rgba(7,11,24,.72); display:none; align-items:flex-end; justify-content:center; z-index:30; padding:0 14px calc(14px + env(safe-area-inset-bottom))}
+.modal[data-open]{display:flex}
+.sheet{width:100%; max-width:360px; background:var(--depth); border:1px solid var(--haze); border-radius:18px; padding:20px}
+.sheet h3{margin:0 0 6px; font-size:18px; font-weight:500}
+.sheet p{margin:0 0 16px; color:var(--moon-dim); font-size:14px}
+.sheet .acts{display:grid; gap:8px}
+.toast{position:absolute; left:50%; top:52px; transform:translateX(-50%); background:var(--moon); color:var(--night); font-size:14px; padding:10px 16px; border-radius:999px; z-index:40; display:none; max-width:86%; text-align:center}
+.toast[data-show]{display:block}
+</style>
+</head>
+<body>
+<div class="stage">
+  <aside class="side">
+    <h1>Roya</h1>
+    <p>앱 프로토타입 · 화면 6개. 폰 화면 안에서 직접 눌러 이동하거나, 아래 목록으로 건너뛸 수 있습니다. 실제 데이터가 아닙니다.</p>
+    <ol id="jump">
+      <li><button type="button" data-go="onboard">온보딩 — 동의·원칙</button></li>
+      <li><button type="button" data-go="devices">기기 연결</button></li>
+      <li><button type="button" data-go="presleep">취침 전 설정</button></li>
+      <li><button type="button" data-go="sleep">수면 중</button></li>
+      <li><button type="button" data-go="report">아침 리포트</button></li>
+      <li><button type="button" data-go="data">설정·데이터</button></li>
+    </ol>
+  </aside>
+
+  <div class="phone" id="phone">
+    <div class="proto" role="note">프로토타입 · 실제 데이터 아님</div>
+
+    <!-- 1. onboarding -->
+    <section class="screen" id="s-onboard" data-active aria-label="온보딩">
+      <div class="scroll">
+        <div class="brandrow">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M38 16A18 18 0 1 1 38 48A20 20 0 0 0 38 16Z" fill="#e5d1a0"/><path d="M14 40c4 3 9 3 13 0" fill="none" stroke="#b9b4f3" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Roya
+        </div>
+        <h2>시작하기 전에, 세 가지를 약속합니다</h2>
+        <p class="lede">아래 내용을 읽고 각각 동의해 주세요. 동의하지 않은 항목이 있으면 Roya는 아무것도 하지 않습니다.</p>
+        <ul class="rules" id="rules">
+          <li><label><input type="checkbox" data-rule><div><small>Privacy by Default</small><b>원시 생체신호는 내 기기에만 저장됩니다</b><span>이어버드·워치·휴대폰 밖으로 나가지 않습니다. 내보내기·삭제는 언제든 내가 합니다.</span></div></label></li>
+          <li><label><input type="checkbox" data-rule><div><small>Human-on-the-loop</small><b>개입 세기는 내가 정하고, 언제든 끌 수 있습니다</b><span>앱은 미리 받은 동의 없이 행동하지 않습니다. 밤마다 ‘오늘은 개입 끄기’를 고를 수 있습니다.</span></div></label></li>
+          <li><label><input type="checkbox" data-rule><div><small>의료기기 아님</small><b>Roya는 웰니스 제품이며 진단·치료를 하지 않습니다</b><span>수면 중 각성 신호를 기록하고 부드러운 진동으로 완화를 보조합니다. 건강이 걱정되면 의사와 상의해 주세요.</span></div></label></li>
+        </ul>
+        <p class="fine">동의 내용은 설정·데이터 화면에서 언제든 다시 볼 수 있고, 철회할 수 있습니다.</p>
+      </div>
+      <div class="footer-act">
+        <button class="btn" id="onboard-next" type="button" disabled>모두 동의하고 시작하기</button>
+      </div>
+    </section>
+
+    <!-- 2. devices -->
+    <section class="screen" id="s-devices" aria-label="기기 연결">
+      <div class="bar"><button class="back" type="button" data-go="onboard">‹ 이전</button><span class="step">2 / 6</span></div>
+      <div class="scroll">
+        <h2>기기를 연결합니다</h2>
+        <p class="lede">두 기기가 모두 연결되어야 밤 기록을 시작할 수 있습니다. 연결 정보는 이 휴대폰에만 저장됩니다.</p>
+        <div class="dev">
+          <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4a4 4 0 0 1 8 0v6a4 4 0 0 1-8 0zM12 14v6"/></svg></div>
+          <div class="txt"><b>귀 안 EEG 이어버드</b><span id="st-ear" data-state="off">연결 안 됨</span></div>
+          <button type="button" id="btn-ear">연결</button>
+        </div>
+        <div class="dev">
+          <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="6" width="10" height="12" rx="3"/><path d="M9 6V3h6v3M9 18v3h6v-3"/></svg></div>
+          <div class="txt"><b>스마트워치</b><span id="st-watch" data-state="off">연결 안 됨 · 심박·진동</span></div>
+          <button type="button" id="btn-watch">연결</button>
+        </div>
+        <p class="fine">이어버드는 귀에 꽂은 상태에서, 워치는 손목에 찬 상태에서 연결해 주세요. 프로토타입에서는 버튼을 누르면 연결된 것으로 표시됩니다.</p>
+      </div>
+      <div class="footer-act">
+        <button class="btn" id="devices-next" type="button" disabled>다음</button>
+      </div>
+    </section>
+
+    <!-- 3. pre-sleep -->
+    <section class="screen" id="s-presleep" aria-label="취침 전 설정">
+      <div class="bar"><button class="back" type="button" data-go="devices">‹ 기기</button><span class="step">3 / 6</span></div>
+      <div class="scroll">
+        <h2>오늘 밤은 이렇게</h2>
+        <p class="lede">설정은 매일 밤 바꿀 수 있고, 바꾸기 전까지 유지됩니다.</p>
+
+        <div class="block">
+          <h3>개입 세기</h3>
+          <p class="hint">REM 수면 중 각성 징후가 보일 때 워치가 진동하는 세기입니다. 깨우기 위한 진동이 아닙니다.</p>
+          <div class="strength">
+            <output id="str-out" for="str">1<small>약하게</small></output>
+            <input type="range" id="str" min="0" max="3" step="1" value="1" aria-label="개입 세기">
+            <div class="ticks" aria-hidden="true"><span>0 끔</span><span>1 약하게</span><span>2 보통</span><span>3 조금 더</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>기록 범위</h3>
+          <p class="hint">끈 항목은 측정·저장하지 않습니다. 판단에 필요한 신호를 끄면 개입도 함께 꺼집니다.</p>
+          <div class="row"><div><b>수면 단계 (이어버드)</b><span>REM 구간을 알아보는 데 필요합니다</span></div><button type="button" class="sw" role="switch" aria-checked="true" id="sw-eeg" aria-label="수면 단계 기록"></button></div>
+          <div class="row"><div><b>심박·피부전도 (워치)</b><span>각성 징후를 판단하는 데 필요합니다</span></div><button type="button" class="sw" role="switch" aria-checked="true" id="sw-auto" aria-label="심박·피부전도 기록"></button></div>
+          <div class="row"><div><b>아침 리포트에 기록 남기기</b><span>끄면 밤 기록을 아침에 바로 지웁니다</span></div><button type="button" class="sw" role="switch" aria-checked="true" id="sw-keep" aria-label="아침 리포트에 기록 남기기"></button></div>
+        </div>
+
+        <div class="block">
+          <div class="row"><div><b>오늘은 개입 끄기</b><span>기록은 하되, 진동은 하지 않습니다</span></div><button type="button" class="sw off-tonight" role="switch" aria-checked="false" id="sw-off" aria-label="오늘은 개입 끄기"></button></div>
+        </div>
+
+        <div class="summary" id="summary" aria-live="polite"></div>
+      </div>
+      <div class="footer-act">
+        <button class="btn" id="presleep-next" type="button">잠들 준비 완료</button>
+      </div>
+      <nav class="tabs" aria-label="주요 화면">
+        <button type="button" data-go="presleep" aria-current="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>취침</button>
+        <button type="button" data-go="report"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 12h4v7H4zM10 8h4v11h-4zM16 14h4v5h-4z"/></svg>리포트</button>
+        <button type="button" data-go="data"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>설정</button>
+      </nav>
+    </section>
+
+    <!-- 4. sleeping -->
+    <section class="screen sleep" id="s-sleep" aria-label="수면 중">
+      <div>
+        <div class="time" id="clock">23:41</div>
+        <p class="status" id="sleep-status"><b>기록 중</b>이어버드·워치 연결됨<br>REM 수면이 아닙니다 · 개입 대기</p>
+        <div class="orb" aria-hidden="true"></div>
+      </div>
+      <div>
+        <button class="stop" type="button" id="stop">중지</button>
+        <p class="sub">중지하면 오늘 밤 기록과 개입이 모두 멈춥니다.<br><button type="button" id="to-morning">프로토타입: 아침으로 건너뛰기</button></p>
+      </div>
+    </section>
+
+    <!-- 5. report -->
+    <section class="screen" id="s-report" aria-label="아침 리포트">
+      <div class="bar"><span>10월 14일 수요일</span><span class="step">5 / 6</span></div>
+      <div class="scroll">
+        <h2>좋은 아침입니다</h2>
+        <p class="lede">어젯밤 기록입니다. 수치는 내 기기에서만 계산했고, 아무 데도 보내지 않았습니다.</p>
+
+        <div class="kpis">
+          <div class="kpi"><b>7시간 48분</b><span>기록 시간 · 23:41–07:29</span></div>
+          <div class="kpi"><b>2회</b><span>완화 보조 (부드러운 진동)</span></div>
+        </div>
+
+        <p class="example">예시 데이터입니다. 실제 측정값이 아닙니다.</p>
+        <div class="chart" role="img" aria-label="수면 단계 띠 그래프 예시. 깸, REM, 얕은 잠, 깊은 잠이 밤 동안 번갈아 나타나고, REM 구간 두 곳에 완화 보조 표시가 있습니다.">
+          <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- stage rows: W y=18, R y=48, L y=78, D y=108 ; x 20..330 = 23:41..07:29 (468 min) -->
+            <g font-family="Noto Sans KR, sans-serif" font-size="10" fill="#b7b3a8">
+              <text x="0" y="28">깸</text><text x="0" y="58">REM</text><text x="0" y="88">얕은</text><text x="0" y="118">깊은</text>
+            </g>
+            <g stroke="#223052" stroke-width="1">
+              <line x1="20" y1="24" x2="330" y2="24"/><line x1="20" y1="54" x2="330" y2="54"/><line x1="20" y1="84" x2="330" y2="84"/><line x1="20" y1="114" x2="330" y2="114"/>
+            </g>
+            <!-- bands -->
+            <g>
+              <rect x="20"  y="18" width="14" height="12" rx="2" fill="#b7b3a8"/>
+              <rect x="34"  y="78" width="22" height="12" rx="2" fill="#8b85d9"/>
+              <rect x="56"  y="108" width="40" height="12" rx="2" fill="#4f4a9c"/>
+              <rect x="96"  y="78" width="16" height="12" rx="2" fill="#8b85d9"/>
+              <rect x="112" y="48" width="18" height="12" rx="2" fill="#e5d1a0"/>
+              <rect x="130" y="78" width="20" height="12" rx="2" fill="#8b85d9"/>
+              <rect x="150" y="108" width="28" height="12" rx="2" fill="#4f4a9c"/>
+              <rect x="178" y="78" width="14" height="12" rx="2" fill="#8b85d9"/>
+              <rect x="192" y="48" width="30" height="12" rx="2" fill="#e5d1a0"/>
+              <rect x="222" y="78" width="26" height="12" rx="2" fill="#8b85d9"/>
+              <rect x="248" y="18" width="6"  height="12" rx="2" fill="#b7b3a8"/>
+              <rect x="254" y="78" width="22" height="12" rx="2" fill="#8b85d9"/>
+              <rect x="276" y="48" width="38" height="12" rx="2" fill="#e5d1a0"/>
+              <rect x="314" y="78" width="8"  height="12" rx="2" fill="#8b85d9"/>
+              <rect x="322" y="18" width="8"  height="12" rx="2" fill="#b7b3a8"/>
+            </g>
+            <!-- soothe events inside REM -->
+            <g fill="none" stroke="#ece7d9" stroke-width="1.2">
+              <circle cx="206" cy="54" r="5"/><circle cx="296" cy="54" r="5"/>
+            </g>
+            <g fill="#ece7d9"><circle cx="206" cy="54" r="1.6"/><circle cx="296" cy="54" r="1.6"/></g>
+            <!-- time axis -->
+            <g font-family="Noto Sans KR, sans-serif" font-size="10" fill="#b7b3a8" text-anchor="middle">
+              <text x="20" y="140" text-anchor="start">23:41</text><text x="99" y="140">01:40</text><text x="178" y="140">03:40</text><text x="257" y="140">05:40</text><text x="330" y="140" text-anchor="end">07:29</text>
+            </g>
+          </svg>
+        </div>
+        <div class="legend" aria-hidden="true">
+          <span><i style="background:#b7b3a8"></i>깸</span><span><i style="background:#e5d1a0"></i>REM</span><span><i style="background:#8b85d9"></i>얕은 잠</span><span><i style="background:#4f4a9c"></i>깊은 잠</span><span><i style="background:#ece7d9; border-radius:50%"></i>완화 보조</span>
+        </div>
+
+        <ul class="events">
+          <li><b>04:21 · REM</b><span>완화 보조 · 세기 1</span></li>
+          <li><b>06:36 · REM</b><span>완화 보조 · 세기 1</span></li>
+        </ul>
+
+        <div class="block">
+          <h3>어젯밤 진동은 어땠나요?</h3>
+          <p class="hint">이 답은 내 기기에만 저장되고, 다음 밤 세기를 고를 때 참고하도록 보여 드립니다.</p>
+          <div class="fb" id="fb">
+            <button type="button" data-fb="good" aria-pressed="false"><small>◡</small>편했어요</button>
+            <button type="button" data-fb="mid" aria-pressed="false"><small>—</small>보통</button>
+            <button type="button" data-fb="bad" aria-pressed="false"><small>◠</small>불편했어요</button>
+          </div>
+          <p class="fb-note" id="fb-note" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="footer-act">
+        <button class="btn" id="report-save" type="button">저장하고 닫기</button>
+      </div>
+      <nav class="tabs" aria-label="주요 화면">
+        <button type="button" data-go="presleep"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>취침</button>
+        <button type="button" data-go="report" aria-current="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 12h4v7H4zM10 8h4v11h-4zM16 14h4v5h-4z"/></svg>리포트</button>
+        <button type="button" data-go="data"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>설정</button>
+      </nav>
+    </section>
+
+    <!-- 6. settings / data -->
+    <section class="screen" id="s-data" aria-label="설정·데이터">
+      <div class="bar"><span>설정</span><span class="step">6 / 6</span></div>
+      <div class="scroll">
+        <h2>내 데이터</h2>
+        <div class="pill"><i aria-hidden="true"></i>모든 기록은 이 휴대폰에만 저장됩니다</div>
+        <ul class="list">
+          <li>저장된 밤<span>1일 (예시)</span></li>
+          <li>차지하는 용량<span>약 4.2 MB (예시)</span></li>
+          <li>마지막 동기화 서버<span>없음</span></li>
+          <li>클라우드 백업<span>꺼짐 · 제공하지 않음</span></li>
+        </ul>
+
+        <div class="block">
+          <h3>동의 내용</h3>
+          <p class="hint">온보딩에서 동의한 세 가지 약속입니다. 철회하면 앱이 기록을 멈춥니다.</p>
+          <button class="btn quiet" type="button" data-go="onboard">동의 내용 다시 보기</button>
+        </div>
+
+        <div class="block">
+          <h3>내보내기</h3>
+          <p class="hint">밤 기록을 파일로 저장합니다. 파일은 내가 고른 곳에만 저장되고, Roya는 받지 않습니다.</p>
+          <button class="btn quiet" type="button" id="export">파일로 내보내기</button>
+          <p class="msg" id="export-msg" aria-live="polite"></p>
+        </div>
+
+        <div class="block">
+          <h3>전체 삭제</h3>
+          <p class="hint">저장된 모든 밤 기록과 피드백을 이 휴대폰에서 지웁니다. 되돌릴 수 없습니다.</p>
+          <button class="btn danger" type="button" id="wipe">모든 기록 삭제</button>
+          <p class="msg" id="wipe-msg" aria-live="polite"></p>
+        </div>
+
+        <p class="fine">Roya 앱 프로토타입 0.1 · 의료기기가 아닙니다 (웰니스 제품)</p>
+      </div>
+      <nav class="tabs" aria-label="주요 화면">
+        <button type="button" data-go="presleep"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>취침</button>
+        <button type="button" data-go="report"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 12h4v7H4zM10 8h4v11h-4zM16 14h4v5h-4z"/></svg>리포트</button>
+        <button type="button" data-go="data" aria-current="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>설정</button>
+      </nav>
+    </section>
+
+    <!-- modal -->
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
+      <div class="sheet">
+        <h3 id="modal-title"></h3>
+        <p id="modal-desc"></p>
+        <div class="acts">
+          <button class="btn" type="button" id="modal-ok"></button>
+          <button class="btn ghost" type="button" id="modal-cancel">취소</button>
+        </div>
+      </div>
+    </div>
+    <div class="toast" id="toast" role="status"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const phone = document.getElementById("phone");
+  const screens = Array.from(phone.querySelectorAll(".screen"));
+  const state = { strength:1, eeg:true, auto:true, keep:true, offTonight:false, fb:null, wiped:false };
+
+  /* ---------- navigation ---------- */
+  function go(id){
+    screens.forEach(s => { if (s.id === "s-" + id) s.setAttribute("data-active",""); else s.removeAttribute("data-active"); });
+    document.querySelectorAll("#jump button").forEach(b => b.setAttribute("aria-current", String(b.dataset.go === id)));
+    const sc = document.querySelector("#s-" + id + " .scroll"); if (sc) sc.scrollTop = 0;
+    const h = document.querySelector("#s-" + id + " h2"); if (h){ h.setAttribute("tabindex","-1"); h.focus({preventScroll:true}); }
+  }
+  document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
+
+  /* ---------- toast / modal ---------- */
+  const toast = document.getElementById("toast"); let toastT;
+  function say(t){ toast.textContent = t; toast.setAttribute("data-show",""); clearTimeout(toastT); toastT = setTimeout(() => toast.removeAttribute("data-show"), 2400); }
+  const modal = document.getElementById("modal");
+  let onOk = null;
+  function confirm(title, desc, okLabel, danger, fn){
+    document.getElementById("modal-title").textContent = title;
+    document.getElementById("modal-desc").textContent = desc;
+    const ok = document.getElementById("modal-ok");
+    ok.textContent = okLabel; ok.className = "btn" + (danger ? " danger" : "");
+    onOk = fn; modal.setAttribute("data-open",""); ok.focus();
+  }
+  document.getElementById("modal-ok").addEventListener("click", () => { modal.removeAttribute("data-open"); if (onOk) onOk(); });
+  document.getElementById("modal-cancel").addEventListener("click", () => modal.removeAttribute("data-open"));
+  modal.addEventListener("click", e => { if (e.target === modal) modal.removeAttribute("data-open"); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") modal.removeAttribute("data-open"); });
+
+  /* ---------- 1. onboarding ---------- */
+  const rules = document.querySelectorAll("[data-rule]");
+  const onboardNext = document.getElementById("onboard-next");
+  rules.forEach(r => r.addEventListener("change", () => { onboardNext.disabled = !Array.from(rules).every(x => x.checked); }));
+  onboardNext.addEventListener("click", () => go("devices"));
+
+  /* ---------- 2. devices ---------- */
+  const dev = { ear:false, watch:false };
+  function connect(key, btn, st, label){
+    if (dev[key]) return;
+    btn.disabled = true; btn.textContent = "연결 중";
+    st.dataset.state = "busy"; st.textContent = "찾는 중…";
+    setTimeout(() => {
+      dev[key] = true;
+      btn.textContent = "연결됨"; btn.setAttribute("data-done",""); btn.disabled = true;
+      st.dataset.state = "on"; st.textContent = label;
+      document.getElementById("devices-next").disabled = !(dev.ear && dev.watch);
+    }, 900);
+  }
+  document.getElementById("btn-ear").addEventListener("click", function(){ connect("ear", this, document.getElementById("st-ear"), "연결됨 · 배터리 86%"); });
+  document.getElementById("btn-watch").addEventListener("click", function(){ connect("watch", this, document.getElementById("st-watch"), "연결됨 · 심박·진동 사용 가능"); });
+  document.getElementById("devices-next").addEventListener("click", () => go("presleep"));
+
+  /* ---------- 3. pre-sleep ---------- */
+  const strNames = ["끔","약하게","보통","조금 더"];
+  const str = document.getElementById("str"), strOut = document.getElementById("str-out");
+  const summary = document.getElementById("summary");
+  function renderSummary(){
+    const vib = state.offTonight || state.strength === 0 || !state.eeg || !state.auto;
+    let why = "";
+    if (state.offTonight) why = "오늘은 개입 끄기를 켰습니다.";
+    else if (state.strength === 0) why = "세기가 0(끔)입니다.";
+    else if (!state.eeg) why = "수면 단계 기록이 꺼져 REM을 알 수 없습니다.";
+    else if (!state.auto) why = "심박·피부전도 기록이 꺼져 각성 징후를 판단할 수 없습니다.";
+    summary.innerHTML = vib
+      ? "오늘 밤: <b>기록만 하고 진동은 하지 않습니다.</b> " + why
+      : "오늘 밤: REM 수면 중 각성 징후가 보이면 <b>세기 " + state.strength + " (" + strNames[state.strength] + ")</b>로 짧게 진동합니다. 기록은 이 휴대폰에만 남습니다.";
+    if (!state.keep) summary.innerHTML += " 아침에 리포트를 보여준 뒤 기록을 지웁니다.";
+    document.getElementById("presleep-next").textContent = vib ? "기록만 하고 잠들기" : "잠들 준비 완료";
+  }
+  str.addEventListener("input", () => { state.strength = Number(str.value); strOut.innerHTML = state.strength + "<small>" + strNames[state.strength] + "</small>"; renderSummary(); });
+  function wireSwitch(id, key){
+    const el = document.getElementById(id);
+    el.addEventListener("click", () => { state[key] = !state[key]; el.setAttribute("aria-checked", String(state[key])); renderSummary(); });
+  }
+  wireSwitch("sw-eeg","eeg"); wireSwitch("sw-auto","auto"); wireSwitch("sw-keep","keep"); wireSwitch("sw-off","offTonight");
+  renderSummary();
+  document.getElementById("presleep-next").addEventListener("click", () => { startSleep(); go("sleep"); });
+
+  /* ---------- 4. sleeping ---------- */
+  let clockT = null;
+  const clock = document.getElementById("clock"), sleepStatus = document.getElementById("sleep-status");
+  function startSleep(){
+    const vib = state.offTonight || state.strength === 0 || !state.eeg || !state.auto;
+    sleepStatus.innerHTML = "<b>기록 중</b>이어버드·워치 연결됨<br>" + (vib ? "오늘은 진동하지 않습니다" : "REM 수면이 아닙니다 · 개입 대기");
+    const base = new Date(); base.setHours(23,41,0,0);
+    let t = 0;
+    const tick = () => { const d = new Date(base.getTime() + t*60000); clock.textContent = String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0"); t++; };
+    tick(); clearInterval(clockT); clockT = setInterval(tick, 1500);
+  }
+  function endSleep(){ clearInterval(clockT); }
+  document.getElementById("stop").addEventListener("click", () => {
+    confirm("기록을 중지할까요?", "오늘 밤 기록과 개입이 모두 멈춥니다. 지금까지의 기록은 이 휴대폰에 남습니다.", "중지", false, () => { endSleep(); go("report"); say("기록을 중지했습니다"); });
+  });
+  document.getElementById("to-morning").addEventListener("click", () => { endSleep(); go("report"); });
+
+  /* ---------- 5. report ---------- */
+  const fbNotes = { good:"다음 밤도 같은 세기로 두겠습니다. 바꾸고 싶으면 취침 전 설정에서 고르세요.", mid:"기록해 두었습니다. 세기는 그대로 둡니다.", bad:"기록해 두었습니다. 다음 취침 전 설정에서 세기를 한 단계 낮추는 선택지를 먼저 보여 드리겠습니다." };
+  document.querySelectorAll("#fb button").forEach(b => b.addEventListener("click", () => {
+    state.fb = b.dataset.fb;
+    document.querySelectorAll("#fb button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    document.getElementById("fb-note").textContent = fbNotes[state.fb];
+  }));
+  document.getElementById("report-save").addEventListener("click", () => { say(state.fb ? "리포트와 피드백을 저장했습니다" : "리포트를 저장했습니다"); go("data"); });
+
+  /* ---------- 6. data ---------- */
+  document.getElementById("export").addEventListener("click", () => {
+    const m = document.getElementById("export-msg");
+    m.className = "msg ok"; m.textContent = "roya-2026-10-14.json 준비됨 · 저장할 위치를 고르세요 (프로토타입에서는 실제 파일을 만들지 않습니다)";
+  });
+  document.getElementById("wipe").addEventListener("click", () => {
+    confirm("모든 기록을 삭제할까요?", "이 휴대폰에 저장된 밤 기록 1일과 피드백을 지웁니다. 되돌릴 수 없습니다.", "삭제", true, () => {
+      state.wiped = true; state.fb = null;
+      const m = document.getElementById("wipe-msg"); m.className = "msg ok"; m.textContent = "삭제했습니다. 저장된 밤 0일.";
+      document.querySelector(".list li span").textContent = "0일";
+      document.querySelectorAll(".list li span")[1].textContent = "0 MB";
+      say("모든 기록을 삭제했습니다");
+    });
+  });
+})();
+</script>
+</body>
+</html>
