@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Roya — 밤의 각성 신호를 기록하고, 부드럽게 완화를 보조합니다</title>
+<title>Roya — REM 수면 안의 각성 신호를 읽고, 부드럽게 완화를 돕는 AI 수면케어</title>
 <meta name="description" content="Roya는 수면 중 각성 신호를 기록하고 부드러운 진동으로 완화를 보조하는 AI 수면케어 프로토타입입니다. 의료기기가 아닌 웰니스 제품으로 개발 중이며, 2027년 파일럿을 준비하고 있습니다.">
 <meta property="og:title" content="Roya — AI 수면케어 프로토타입">
-<meta property="og:description" content="수면 중 각성 신호를 기록하고 부드러운 진동으로 완화를 보조합니다. 의료기기가 아닙니다.">
+<meta property="og:description" content="REM 수면 안에서만 각성 신호를 보고, 부드러운 진동으로 완화를 보조합니다. 의료기기가 아닙니다.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://roya.ai.kr/">
 <meta name="theme-color" content="#101830">
@@ -18,6 +18,7 @@
 /* ---------- tokens ---------- */
 :root{
   --night:#101830;
+  --deep:#0b1126;
   --depth:#182341;
   --haze:#2b3759;
   --haze-soft:#223052;
@@ -28,6 +29,7 @@
   --gold:#e5d1a0;
   --danger:#f0a8a8;
   --measure:34rem;
+  --wide:66rem;
   --gutter:clamp(16px, 5vw, 48px);
   --sans:"Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
   --serif:"Fraunces", "Iowan Old Style", Georgia, serif;
@@ -36,15 +38,9 @@
 html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
 @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
 body{
-  margin:0;
-  background:var(--night);
-  color:var(--moon);
-  font-family:var(--sans);
-  font-size:17px;
-  line-height:1.75;
-  word-break:keep-all;
-  overflow-wrap:anywhere;
-  -webkit-font-smoothing:antialiased;
+  margin:0; background:var(--night); color:var(--moon);
+  font-family:var(--sans); font-size:17px; line-height:1.7;
+  word-break:keep-all; overflow-wrap:anywhere; -webkit-font-smoothing:antialiased;
 }
 ::selection{background:var(--lilac); color:var(--night)}
 a{color:var(--lilac); text-decoration-thickness:1px; text-underline-offset:3px}
@@ -55,7 +51,7 @@ a:hover{color:var(--moon)}
 h1,h2,h3{font-weight:500; line-height:1.3; margin:0}
 p{margin:0}
 .wrap{max-width:var(--measure); margin-inline:auto; padding-inline:var(--gutter)}
-.wrap-wide{max-width:64rem; margin-inline:auto; padding-inline:var(--gutter)}
+.wrap-wide{max-width:var(--wide); margin-inline:auto; padding-inline:var(--gutter)}
 
 /* ---------- header ---------- */
 .top{
@@ -72,26 +68,16 @@ p{margin:0}
 .top nav a{color:var(--moon-dim); text-decoration:none; font-size:15px}
 .top nav a:hover{color:var(--moon)}
 .top nav a.hide-sm{display:none}
-@media (min-width:640px){ .top nav a.hide-sm{display:inline} }
-.lang{
-  display:inline-flex; border:1px solid var(--haze); border-radius:999px; overflow:hidden;
-  font-size:13px; line-height:1;
-}
-.lang button{
-  appearance:none; border:0; background:transparent; color:var(--moon-dim);
-  padding:8px 11px; min-height:34px; cursor:pointer; font:inherit; font-family:var(--sans);
-}
+@media (min-width:720px){ .top nav a.hide-sm{display:inline} }
+.lang{display:inline-flex; border:1px solid var(--haze); border-radius:999px; overflow:hidden; font-size:13px; line-height:1}
+.lang button{appearance:none; border:0; background:transparent; color:var(--moon-dim); padding:8px 11px; min-height:34px; cursor:pointer; font:inherit; font-family:var(--sans)}
 .lang button[aria-pressed="true"]{background:var(--moon); color:var(--night)}
 
 /* ---------- hero ---------- */
-.hero{
-  position:relative; overflow:hidden;
-  padding:clamp(72px, 14vh, 140px) 0 clamp(64px, 10vh, 110px);
-  isolation:isolate;
-}
+.hero{position:relative; overflow:hidden; padding:clamp(56px, 10vh, 104px) 0 0; isolation:isolate}
 .sky{position:absolute; inset:0; z-index:-1; pointer-events:none}
 .sky .halo{
-  position:absolute; left:50%; top:46%;
+  position:absolute; left:50%; top:30%;
   width:min(80vw, 560px); aspect-ratio:1; border-radius:50%;
   transform:translate(-50%,-50%);
   background:radial-gradient(circle, rgba(185,180,243,.22) 0%, rgba(185,180,243,.08) 38%, rgba(16,24,48,0) 68%);
@@ -99,35 +85,24 @@ p{margin:0}
 }
 .sky .stars{position:absolute; inset:0; width:100%; height:100%}
 .sky .stars circle{fill:var(--moon); opacity:.45}
-.sky .horizon{
-  position:absolute; left:0; right:0; bottom:0; height:1px;
-  background:linear-gradient(90deg, transparent, var(--haze) 20%, var(--lilac-deep) 50%, var(--haze) 80%, transparent);
-}
 @keyframes breathe{
   0%,100%{transform:translate(-50%,-50%) scale(.86); opacity:.75}
   50%{transform:translate(-50%,-50%) scale(1.08); opacity:1}
 }
 @media (prefers-reduced-motion:reduce){ .sky .halo{animation:none; opacity:.9} }
 .hero .wrap{text-align:center}
-.mark{width:56px; height:56px; margin:0 auto 22px; display:block}
 .wordmark{
   font-family:var(--serif); font-style:italic; font-weight:300;
-  font-size:clamp(68px, 16vw, 128px); line-height:1; letter-spacing:-.01em;
-  color:var(--moon);
+  font-size:clamp(72px, 16vw, 132px); line-height:1; letter-spacing:-.01em; color:var(--moon);
   font-variation-settings:"opsz" 144;
 }
-.wordmark small{
-  display:block; font-family:var(--sans); font-style:normal; font-weight:400;
-  font-size:15px; letter-spacing:.14em; color:var(--moon-dim); margin-top:14px;
-}
-.promise{
-  font-size:clamp(19px, 2.6vw, 23px); line-height:1.6; margin:34px auto 0; max-width:26em; font-weight:400;
-}
-.promise em{font-style:normal}
-.hero-note{color:var(--moon-dim); font-size:15px; margin-top:16px}
+.wordmark small{display:block; font-family:var(--sans); font-style:normal; font-weight:400; font-size:14px; letter-spacing:.12em; color:var(--moon-dim); margin-top:12px}
+.promise{font-size:clamp(20px, 2.8vw, 26px); line-height:1.5; margin:30px auto 0; max-width:22em; font-weight:500}
+.hero-note{color:var(--moon-dim); font-size:15px; margin-top:12px}
+.cta-row{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:28px}
 .cta{
   display:inline-flex; align-items:center; justify-content:center; gap:8px;
-  min-height:50px; padding:12px 26px; margin-top:32px;
+  min-height:50px; padding:12px 26px;
   border-radius:999px; border:1px solid var(--lilac);
   background:var(--lilac); color:var(--night); font-weight:500; font-size:16px;
   text-decoration:none; transition:background .2s, border-color .2s;
@@ -136,81 +111,102 @@ p{margin:0}
 .cta.ghost{background:transparent; color:var(--lilac)}
 .cta.ghost:hover{background:rgba(185,180,243,.12); color:var(--moon)}
 
+/* the night, in one picture */
+.night{margin:clamp(44px, 8vh, 72px) auto 0; max-width:var(--wide); padding-inline:var(--gutter)}
+.night figure{margin:0}
+.night svg{display:block; width:100%; height:auto}
+.night .lane-label{font-family:var(--sans); font-size:13px; fill:var(--moon-dim)}
+.night .tick{font-family:var(--sans); font-size:12px; fill:var(--moon-dim)}
+.night .track{fill:var(--depth)}
+.night .stage{fill:var(--haze)}
+.night .rem{fill:var(--lilac)}
+.night .deep{fill:#3d4a7a}
+.night .pulse{fill:var(--gold)}
+.night .cursor{stroke:var(--moon); stroke-width:1; opacity:.55}
+.night .legend{font-family:var(--sans); font-size:13px; fill:var(--moon)}
+@media (prefers-reduced-motion:no-preference){
+  .night .cursor{animation:sweep 18s linear infinite}
+  @keyframes sweep{from{transform:translateX(0)} to{transform:translateX(880px)}}
+}
+@media (max-width:760px){
+  .night .lane-label{font-size:26px}
+  .night .tick{font-size:24px}
+}
+.night figcaption{color:var(--moon-dim); font-size:14px; text-align:center; margin-top:10px}
+.night figcaption b{color:var(--moon); font-weight:500}
+
 /* ---------- sections ---------- */
-section{padding:clamp(64px, 10vh, 112px) 0}
+section{padding:clamp(56px, 9vh, 96px) 0}
 section + section{border-top:1px solid var(--haze-soft)}
-.sec-title{font-size:clamp(26px, 4vw, 34px); font-weight:500; margin-bottom:12px}
-.sec-lede{color:var(--moon-dim); max-width:30em; margin-bottom:40px}
+section.band{background:var(--deep)}
+.sec-title{font-size:clamp(26px, 4vw, 34px); font-weight:500; margin-bottom:10px}
+.sec-lede{color:var(--moon-dim); max-width:30em; margin-bottom:36px}
 
-/* how it works: a genuine sequence, so a connected line */
-.steps{list-style:none; margin:0; padding:0; counter-reset:step}
-.steps li{
-  position:relative; padding-left:52px; padding-bottom:36px; counter-increment:step;
-}
+/* steps: a real sequence, so numbered and connected */
+.steps{list-style:none; margin:0; padding:0; counter-reset:step; display:grid; gap:28px}
+.steps li{position:relative; padding-left:52px; counter-increment:step}
 .steps li::before{
-  content:counter(step);
-  position:absolute; left:0; top:2px;
-  width:32px; height:32px; border-radius:50%;
-  border:1px solid var(--lilac-deep); color:var(--lilac);
-  font-family:var(--serif); font-size:17px; line-height:30px; text-align:center;
-  background:var(--night);
+  content:counter(step); position:absolute; left:0; top:0;
+  width:34px; height:34px; border-radius:50%; border:1px solid var(--lilac-deep); color:var(--lilac);
+  font-family:var(--serif); font-size:18px; line-height:32px; text-align:center; background:var(--night);
 }
-.steps li::after{
-  content:""; position:absolute; left:15.5px; top:36px; bottom:0; width:1px;
-  background:var(--haze);
+.steps h3{font-size:19px; margin-bottom:4px}
+.steps h3 span{color:var(--moon-dim); font-weight:400; font-size:14px; margin-left:8px}
+.steps p{color:var(--moon-dim); font-size:16px}
+@media (min-width:760px){
+  .steps{grid-template-columns:repeat(3, 1fr); gap:32px}
+  .steps li{padding-left:0; padding-top:50px}
+  .steps li::before{top:0}
+  .steps li::after{content:""; position:absolute; left:44px; right:-32px; top:17px; height:1px; background:var(--haze)}
+  .steps li:last-child::after{display:none}
 }
-.steps li:last-child{padding-bottom:0}
-.steps li:last-child::after{display:none}
-.steps h3{font-size:20px; margin-bottom:6px}
-.steps h3 span{color:var(--moon-dim); font-weight:400; font-size:15px; margin-left:8px}
-.steps p{color:var(--moon-dim)}
-.device-row{
-  display:flex; flex-wrap:wrap; gap:10px 20px; margin-top:44px; padding-top:22px;
-  border-top:1px dashed var(--haze); color:var(--moon-dim); font-size:15px;
-}
-.device-row span{display:inline-flex; align-items:center; gap:8px}
-.device-row svg{width:18px; height:18px; stroke:var(--lilac); fill:none; stroke-width:1.5}
 
-/* principles: definition list, no cards */
-.principles{margin:0}
-.principles > div{
-  display:grid; grid-template-columns:1fr; gap:6px 32px;
-  padding:26px 0; border-top:1px solid var(--haze-soft);
+/* evidence: three numbers */
+.nums{display:grid; gap:18px; margin-top:8px}
+.num{padding:24px 0; border-top:1px solid var(--haze-soft)}
+.num b{display:block; font-family:var(--serif); font-weight:400; font-size:clamp(44px, 7vw, 64px); line-height:1; color:var(--moon); font-variation-settings:"opsz" 100}
+.num b i{font-style:normal; font-size:.42em; color:var(--moon-dim); margin-left:6px; letter-spacing:.02em}
+.num span{display:block; margin-top:8px; font-size:15px; color:var(--moon-dim)}
+@media (min-width:760px){
+  .nums{grid-template-columns:repeat(3, 1fr); gap:32px}
+  .num{border-top:1px solid var(--haze-soft)}
 }
-.principles > div:last-child{border-bottom:1px solid var(--haze-soft)}
-.principles dt{font-size:19px; font-weight:500}
-.principles dt small{display:block; font-family:var(--serif); font-style:italic; font-weight:300; color:var(--lilac); font-size:16px; margin-top:2px}
-.principles dd{margin:0; color:var(--moon-dim)}
-@media (min-width:720px){
-  #principles .wrap{max-width:44rem}
-  .principles > div{grid-template-columns:12rem 1fr}
+.fine-print{font-size:14px; color:var(--moon-dim); margin-top:24px; max-width:44em}
+
+/* app preview */
+.app-row{display:grid; gap:28px; align-items:center; margin-top:8px}
+.phones{display:flex; gap:16px; justify-content:center}
+.phones img{width:min(44%, 230px); height:auto; border-radius:22px; border:1px solid var(--haze); background:var(--deep); display:block}
+.app-copy p{color:var(--moon-dim)}
+.app-copy p + p{margin-top:10px}
+.app-copy .cta{margin-top:20px}
+@media (min-width:760px){
+  .app-row{grid-template-columns:1.1fr 1fr; gap:48px}
 }
-.notice{
-  margin-top:36px; padding:18px 20px; border-left:2px solid var(--gold);
-  background:var(--depth); border-radius:0 8px 8px 0; font-size:15px; color:var(--moon);
-}
+
+/* principles: three short lines */
+.principles{list-style:none; margin:0; padding:0; display:grid; gap:18px}
+.principles li{padding:20px 0; border-top:1px solid var(--haze-soft)}
+.principles h3{font-size:18px; margin-bottom:4px}
+.principles h3 small{display:block; font-family:var(--serif); font-style:italic; font-weight:300; color:var(--lilac); font-size:15px}
+.principles p{color:var(--moon-dim); font-size:16px}
+@media (min-width:760px){ .principles{grid-template-columns:repeat(3, 1fr); gap:32px} }
+.notice{margin-top:32px; padding:16px 20px; border-left:2px solid var(--gold); background:var(--depth); border-radius:0 8px 8px 0; font-size:15px}
 .notice strong{font-weight:500; color:var(--gold)}
 
 /* roadmap: horizon line */
-.road{position:relative; margin-top:48px; padding-top:28px}
-.road::before{
-  content:""; position:absolute; left:0; right:0; top:0; height:1px;
-  background:linear-gradient(90deg, var(--lilac) 0%, var(--haze) 70%, transparent);
-}
-.road ol{list-style:none; margin:0; padding:0; display:grid; gap:28px}
+.road{position:relative; margin-top:8px; padding-top:28px}
+.road::before{content:""; position:absolute; left:0; right:0; top:0; height:1px; background:linear-gradient(90deg, var(--lilac) 0%, var(--haze) 70%, transparent)}
+.road ol{list-style:none; margin:0; padding:0; display:grid; gap:24px}
 .road li{position:relative; padding-left:28px}
-.road li::before{
-  content:""; position:absolute; left:0; top:10px; width:10px; height:10px; border-radius:50%;
-  border:1px solid var(--lilac); background:var(--night);
-}
+.road li::before{content:""; position:absolute; left:0; top:10px; width:10px; height:10px; border-radius:50%; border:1px solid var(--lilac); background:var(--night)}
 .road li.now::before{background:var(--lilac)}
 .road li:not(.now){color:var(--moon-dim)}
 .road time{display:block; font-family:var(--serif); font-style:italic; color:var(--lilac); font-size:18px}
 .road li:not(.now) time{color:var(--moon-dim)}
-.road li p{margin-top:4px}
 .road .tag{display:inline-block; font-size:13px; color:var(--night); background:var(--lilac); border-radius:999px; padding:1px 9px; margin-left:8px; vertical-align:2px; font-weight:500}
 @media (min-width:720px){
-  .road ol{grid-template-columns:repeat(3, 1fr); gap:24px}
+  .road ol{grid-template-columns:repeat(3, 1fr)}
   .road li{padding-left:0; padding-top:22px}
   .road li::before{left:0; top:-5px}
 }
@@ -219,15 +215,11 @@ section + section{border-top:1px solid var(--haze-soft)}
 .form{display:grid; gap:18px; margin-top:8px}
 .field label{display:block; font-size:15px; margin-bottom:6px}
 .field label span{color:var(--moon-dim)}
-.field input[type="email"], .field textarea{
-  width:100%; min-height:50px; padding:12px 14px; font:inherit; font-size:16px;
-  color:var(--moon); background:var(--depth); border:1px solid var(--haze); border-radius:10px;
-}
-.field textarea{min-height:96px; resize:vertical}
+.field input[type="email"], .field textarea{width:100%; min-height:50px; padding:12px 14px; font:inherit; font-size:16px; color:var(--moon); background:var(--depth); border:1px solid var(--haze); border-radius:10px}
+.field textarea{min-height:88px; resize:vertical}
 .field input:focus, .field textarea:focus{border-color:var(--lilac); outline:none; box-shadow:0 0 0 3px rgba(185,180,243,.22)}
-.check{display:flex; gap:12px; align-items:flex-start; font-size:15px; color:var(--moon-dim)}
+.check{display:flex; gap:12px; align-items:flex-start; font-size:14px; color:var(--moon-dim)}
 .check input{width:22px; height:22px; margin:3px 0 0; accent-color:var(--lilac); flex:none}
-.check a{color:var(--lilac)}
 .form button{justify-self:start; cursor:pointer; font-family:var(--sans)}
 .form button[disabled]{opacity:.6; cursor:wait}
 .form-msg{font-size:15px; color:var(--moon-dim); min-height:1.5em}
@@ -237,10 +229,9 @@ section + section{border-top:1px solid var(--haze-soft)}
 .thanks h3{font-size:22px; margin-bottom:8px}
 .thanks p{color:var(--moon-dim)}
 .thanks svg{width:40px; height:40px; margin-bottom:14px}
-.fine{font-size:14px; color:var(--moon-dim); margin-top:20px}
 
 /* footer */
-footer{border-top:1px solid var(--haze-soft); padding:40px 0 56px; color:var(--moon-dim); font-size:14px}
+footer{border-top:1px solid var(--haze-soft); padding:36px 0 52px; color:var(--moon-dim); font-size:14px}
 footer .wrap{display:flex; flex-wrap:wrap; gap:10px 24px; justify-content:space-between; align-items:center}
 footer a{color:var(--moon-dim)}
 footer a:hover{color:var(--moon)}
@@ -256,9 +247,9 @@ footer a:hover{color:var(--moon)}
   </a>
   <nav aria-label="페이지 내 이동">
     <a class="hide-sm" href="#how" data-en="How it works">작동 방식</a>
+    <a class="hide-sm" href="#evidence" data-en="Evidence">검증</a>
+    <a class="hide-sm" href="#app" data-en="App">앱</a>
     <a class="hide-sm" href="#principles" data-en="Principles">원칙</a>
-    <a class="hide-sm" href="#roadmap" data-en="Roadmap">로드맵</a>
-    <a class="hide-sm" href="app/" data-en="App preview">앱 미리보기</a>  <!-- 2026-10-16 추가: 프로토타입 링크 -->
     <a href="#waitlist" data-en="Waitlist">대기자 신청</a>
     <div class="lang" role="group" aria-label="Language">
       <button type="button" data-lang="ko" aria-pressed="true" lang="ko">한국어</button>
@@ -278,78 +269,145 @@ footer a:hover{color:var(--moon)}
       <circle cx="1170" cy="500" r="1"/><circle cx="420" cy="520" r=".8"/><circle cx="880" cy="540" r="1.1"/>
       <circle cx="650" cy="30" r=".9"/><circle cx="230" cy="180" r=".7"/><circle cx="960" cy="200" r=".8"/>
     </svg>
-    <div class="horizon"></div>
   </div>
   <div class="wrap">
-    <svg class="mark" viewBox="0 0 64 64" role="img" aria-label="Roya 마크">
-      <defs>
-        <radialGradient id="g1" cx="40%" cy="40%" r="70%">
-          <stop offset="0" stop-color="#f3e6c2"/><stop offset="1" stop-color="#e5d1a0"/>
-        </radialGradient>
-      </defs>
-      <circle cx="32" cy="32" r="30" fill="none" stroke="#2b3759" stroke-width="1"/>
-      <path d="M38 16A18 18 0 1 1 38 48A20 20 0 0 0 38 16Z" fill="url(#g1)"/>
-      <path d="M14 40c4 3 9 3 13 0" fill="none" stroke="#b9b4f3" stroke-width="1.6" stroke-linecap="round"/>
-    </svg>
     <h1 class="wordmark">Roya<small data-en="rōyā · “dream” in Persian">로야 · 페르시아어로 ‘꿈’</small></h1>
-    <p class="promise" data-en="During sleep, Roya records arousal signals and supports calming with a <em>gentle vibration</em>.">수면 중 각성 신호를 기록하고, <em>부드러운 진동</em>으로 완화를 보조합니다.</p>
-    <p class="hero-note" data-en="A wellness prototype in development — not a medical device. Pilot planned for 2027.">개발 중인 웰니스 프로토타입입니다. 의료기기가 아니며, 2027년 파일럿을 준비하고 있습니다.</p>
-    <a class="cta" href="#waitlist" data-en="Join the waitlist">대기자 신청하기</a>
+    <p class="promise" data-en="Reads arousal signals only inside REM sleep, and calms with a gentle vibration.">REM 수면 안에서만 각성 신호를 읽고, 부드러운 진동으로 완화를 돕습니다.</p>
+    <p class="hero-note" data-en="A wellness prototype, not a medical device. Pilot in 2027.">웰니스 프로토타입이며 의료기기가 아닙니다. 2027년 파일럿.</p>
+    <div class="cta-row">
+      <a class="cta" href="#waitlist" data-en="Join the waitlist">대기자 신청</a>
+      <a class="cta ghost" href="app/" data-en="Try the app preview">앱 미리보기</a>
+    </div>
+  </div>
+
+  <div class="night">
+    <figure>
+      <svg viewBox="0 0 1000 170" role="img" aria-labelledby="night-title night-desc">
+        <title id="night-title">하룻밤의 수면 단계와 Roya의 개입 지점</title>
+        <desc id="night-desc">밤 전체를 가로 막대로 표시한 그림. 얕은 잠과 깊은 잠 사이에 REM 구간 세 개가 밝게 표시되고, 그중 두 곳에 부드러운 진동을 뜻하는 작은 점이 있다. REM 밖에는 아무 표시가 없다.</desc>
+        <!-- lane labels -->
+        <text class="lane-label" x="0" y="48">REM</text>
+        <text class="lane-label" x="0" y="84">얕은 잠</text>
+        <text class="lane-label" x="0" y="120">깊은 잠</text>
+        <!-- tracks -->
+        <rect class="track" x="80" y="36" width="880" height="16" rx="8"/>
+        <rect class="track" x="80" y="72" width="880" height="16" rx="8"/>
+        <rect class="track" x="80" y="108" width="880" height="16" rx="8"/>
+        <!-- light sleep blocks -->
+        <rect class="stage" x="84" y="72" width="120" height="16" rx="8"/>
+        <rect class="stage" x="300" y="72" width="60" height="16" rx="8"/>
+        <rect class="stage" x="430" y="72" width="80" height="16" rx="8"/>
+        <rect class="stage" x="600" y="72" width="60" height="16" rx="8"/>
+        <rect class="stage" x="760" y="72" width="70" height="16" rx="8"/>
+        <rect class="stage" x="900" y="72" width="56" height="16" rx="8"/>
+        <!-- deep sleep blocks -->
+        <rect class="deep" x="204" y="108" width="96" height="16" rx="8"/>
+        <rect class="deep" x="510" y="108" width="90" height="16" rx="8"/>
+        <!-- REM blocks -->
+        <rect class="rem" x="360" y="36" width="70" height="16" rx="8"/>
+        <rect class="rem" x="660" y="36" width="100" height="16" rx="8"/>
+        <rect class="rem" x="830" y="36" width="70" height="16" rx="8"/>
+        <!-- gentle vibration marks, only inside REM -->
+        <circle class="pulse" cx="712" cy="44" r="5"/>
+        <circle class="pulse" cx="866" cy="44" r="5"/>
+        <!-- sweeping "now" line -->
+        <line class="cursor" x1="80" y1="30" x2="80" y2="130"/>
+        <!-- ticks -->
+        <text class="tick" x="80" y="150">23:40</text>
+        <text class="tick" x="300" y="150">01:40</text>
+        <text class="tick" x="520" y="150">03:40</text>
+        <text class="tick" x="740" y="150">05:40</text>
+        <text class="tick" x="930" y="150">07:30</text>
+      </svg>
+      <figcaption data-en="One night, as Roya sees it. <b>Vibration happens only inside REM</b> — and only at the strength you chose.">Roya가 보는 하룻밤. <b>진동은 REM 안에서만</b>, 미리 정한 세기로만 일어납니다.</figcaption>
+    </figure>
   </div>
 </section>
 
 <section id="how">
-  <div class="wrap">
+  <div class="wrap-wide">
     <h2 class="sec-title" data-en="How it works">작동 방식</h2>
-    <p class="sec-lede" data-en="Three steps, in this order, every night. Each step only begins if the one before it says so.">매일 밤 세 단계가 이 순서로 진행됩니다. 앞 단계가 허락할 때만 다음 단계로 넘어갑니다.</p>
+    <p class="sec-lede" data-en="Three steps every night. Each one runs only when the one before it says so.">매일 밤 세 단계. 앞 단계가 허락할 때만 다음으로 갑니다.</p>
     <ol class="steps">
       <li>
-        <h3 data-en="Sense <span>in-ear EEG earbud</span>">감지 <span>귀 안 EEG 이어버드</span></h3>
-        <p data-en="A small earbud reads brain activity while you sleep and recognizes when you are in REM sleep — the stage in which most vivid dreams occur. Outside REM, nothing else happens.">작은 이어버드가 수면 중 뇌 활동을 읽고, 생생한 꿈이 주로 나타나는 REM 수면 구간인지 먼저 알아봅니다. REM 밖에서는 아무 일도 일어나지 않습니다.</p>
+        <h3 data-en="Gate <span>in-ear EEG</span>">게이트 <span>귀 안 EEG</span></h3>
+        <p data-en="A small earbud tells whether you are in REM sleep. Outside REM, nothing happens.">작은 이어버드가 지금 REM 수면인지 확인합니다. REM 밖에서는 아무 일도 없습니다.</p>
       </li>
       <li>
-        <h3 data-en="Judge <span>smartwatch signals</span>">판단 <span>스마트워치 신호</span></h3>
-        <p data-en="Within REM, the watch’s heart-rate and skin-conductance readings are checked for signs of heightened arousal. Everything is computed on your devices.">REM 구간 안에서 스마트워치의 심박과 피부전도 신호를 보고 각성이 높아진 징후가 있는지 살핍니다. 계산은 모두 내 기기 안에서 이루어집니다.</p>
+        <h3 data-en="Watch <span>heart rate · skin</span>">관찰 <span>심박 · 피부전도</span></h3>
+        <p data-en="Inside REM, the watch looks for signs of heightened arousal — on your devices only.">REM 안에서만 워치가 각성이 높아진 징후를 찾습니다. 계산은 내 기기 안에서만.</p>
       </li>
       <li>
-        <h3 data-en="Soothe <span>gentle vibration</span>">부드러운 개입 <span>진동</span></h3>
-        <p data-en="If arousal signs appear, the watch gives a soft, brief vibration at the strength you chose — never strong enough to wake you by design. In the morning, the app shows what happened and lets you tell us how it felt.">각성 징후가 보이면 미리 정해 둔 세기로 워치가 짧고 부드럽게 진동합니다. 깨우기 위한 진동이 아닙니다. 아침에는 앱에서 밤사이 기록을 보고, 어땠는지 직접 남길 수 있습니다.</p>
+        <h3 data-en="Soothe <span>gentle vibration</span>">완화 <span>부드러운 진동</span></h3>
+        <p data-en="A brief, soft vibration at the strength you set. In the morning, the app shows the night.">미리 정한 세기로 짧게 진동합니다. 아침에 앱이 밤을 보여줍니다.</p>
       </li>
     </ol>
-    <div class="device-row" aria-label="구성 기기">
-      <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4a4 4 0 0 1 8 0v6a4 4 0 0 1-8 0zM12 14v6"/></svg><b data-en="In-ear EEG earbud">귀 안 EEG 이어버드</b></span>
-      <span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="6" width="10" height="12" rx="3"/><path d="M9 6V3h6v3M9 18v3h6v-3"/></svg><b data-en="Smartwatch (heart rate, vibration)">스마트워치 (심박·진동)</b></span>
-      <span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg><b data-en="Mobile app (morning report)">모바일 앱 (아침 리포트)</b></span>
+  </div>
+</section>
+
+<section id="evidence" class="band">
+  <div class="wrap-wide">
+    <h2 class="sec-title" data-en="Tested on public data">공개 데이터로 검증했습니다</h2>
+    <p class="sec-lede" data-en="Both steps were checked separately on published sleep datasets before any hardware was bought.">기기를 사기 전에, 두 단계를 공개 수면 데이터로 각각 확인했습니다.</p>
+    <div class="nums">
+      <div class="num">
+        <b>0.93<i>AUC</i></b>
+        <span data-en="REM gate from a single forehead EEG channel, in real time · 78 people">이마 EEG 한 채널로 실시간 REM 판별 · 78명</span>
+      </div>
+      <div class="num">
+        <b>0.95<i>AUC</i></b>
+        <span data-en="Same gate on an unseen group from another clinic · 22 people">다른 병원·장비의 새 데이터에서도 유지 · 22명</span>
+      </div>
+      <div class="num">
+        <b>0.82<i>AUC</i></b>
+        <span data-en="Arousal candidates inside REM from wrist signals · 20 people">REM 안 각성 후보 탐지, 손목 신호 · 20명</span>
+      </div>
+    </div>
+    <p class="fine-print" data-en="Subject-level cross-validation on Sleep-EDF Expanded (PhysioNet) and DREAMT. These are research results on public datasets, not a measure of what Roya does for any individual.">Sleep-EDF Expanded(PhysioNet)와 DREAMT에서 피험자 단위 교차검증. 공개 데이터의 연구 결과이며, 개인에게 어떤 효과가 있다는 뜻이 아닙니다.</p>
+  </div>
+</section>
+
+<section id="app">
+  <div class="wrap-wide">
+    <h2 class="sec-title" data-en="The app, as it stands">앱은 이렇게 생겼습니다</h2>
+    <div class="app-row">
+      <div class="phones">
+        <img src="assets/app-presleep.png" alt="취침 전 설정 화면: 진동 세기 0~3 슬라이더와 기록 범위 토글" loading="lazy" width="780" height="1688">
+        <img src="assets/app-report.png" alt="아침 리포트 화면: 수면 단계 타임라인과 완화 보조 2회 기록" loading="lazy" width="780" height="1688">
+      </div>
+      <div class="app-copy">
+        <p data-en="Before bed, you choose the vibration strength and what gets recorded. In the morning, you see the night on one timeline — computed on your phone, sent nowhere.">자기 전에 진동 세기와 기록 범위를 정하고, 아침에 밤 전체를 타임라인 하나로 봅니다. 수치는 휴대폰에서만 계산하고 아무 데도 보내지 않습니다.</p>
+        <p data-en="Six screens, clickable, no real data yet.">여섯 화면, 클릭해 볼 수 있고, 아직 실제 데이터는 없습니다.</p>
+        <a class="cta ghost" href="app/" data-en="Open the prototype">프로토타입 열기</a>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="principles">
-  <div class="wrap">
+<section id="principles" class="band">
+  <div class="wrap-wide">
     <h2 class="sec-title" data-en="Three promises">세 가지 약속</h2>
-    <p class="sec-lede" data-en="Roya touches the most private hours of your day. These rules are built into the product, not written after the fact.">Roya는 하루 중 가장 사적인 시간에 닿는 제품입니다. 이 규칙은 나중에 덧붙인 문구가 아니라 제품 안에 먼저 들어가 있습니다.</p>
-    <dl class="principles">
-      <div>
-        <dt data-en="Privacy by default<small>Nothing leaves your devices</small>">기본값은 비공개<small>Privacy by Default</small></dt>
-        <dd data-en="Raw biosignals stay on your earbud, watch and phone. Nothing leaves your devices unless you explicitly agree, and you can delete everything at any time.">원시 생체신호는 이어버드·워치·휴대폰 안에만 머뭅니다. 명시적으로 동의하지 않으면 어떤 데이터도 기기 밖으로 나가지 않고, 언제든 전부 지울 수 있습니다.</dd>
-      </div>
-      <div>
-        <dt data-en="You stay in charge<small>Human-on-the-loop</small>">결정은 사람이<small>Human-on-the-loop</small></dt>
-        <dd data-en="You set the vibration strength, you can turn intervention off for any night, and the app never acts without consent you gave beforehand.">진동 세기는 사용자가 정하고, 어떤 밤이든 개입을 끌 수 있습니다. 앱은 미리 받은 동의 없이는 아무 행동도 하지 않습니다.</dd>
-      </div>
-      <div>
-        <dt data-en="Honest wording<small>Not a medical device</small>">정직한 표현<small>의료기기 아님</small></dt>
-        <dd data-en="Roya records arousal signals during sleep and supports calming with gentle vibration. It is a wellness product, not a medical device, and it does not diagnose, treat or prevent any condition.">Roya는 수면 중 각성 신호를 기록하고 부드러운 진동으로 완화를 보조합니다. 웰니스 제품이며 의료기기가 아닙니다. 어떤 질환도 진단·치료·예방하지 않습니다.</dd>
-      </div>
-    </dl>
+    <ul class="principles">
+      <li>
+        <h3 data-en="Private by default<small>Privacy by Default</small>">기본값은 비공개<small>Privacy by Default</small></h3>
+        <p data-en="Biosignals stay on your devices unless you say otherwise. Delete everything at any time.">생체신호는 동의 없이는 기기 밖으로 나가지 않습니다. 언제든 전부 지울 수 있습니다.</p>
+      </li>
+      <li>
+        <h3 data-en="You stay in charge<small>Human-on-the-loop</small>">결정은 사람이<small>Human-on-the-loop</small></h3>
+        <p data-en="You set the strength, you can turn it off for any night. The app never acts without prior consent.">세기는 사용자가 정하고, 어떤 밤이든 끌 수 있습니다. 앱은 미리 받은 동의 없이 움직이지 않습니다.</p>
+      </li>
+      <li>
+        <h3 data-en="Honest wording<small>Not a medical device</small>">정직한 표현<small>의료기기 아님</small></h3>
+        <p data-en="Roya records and supports calming. It does not diagnose, treat or prevent anything.">Roya는 기록하고 완화를 돕습니다. 어떤 질환도 진단·치료·예방하지 않습니다.</p>
+      </li>
+    </ul>
     <p class="notice" data-en="<strong>If sleep is affecting your health,</strong> please talk to a doctor or a sleep clinic. Roya is not a substitute for professional care."><strong>수면 문제로 건강이 걱정된다면</strong> 의사나 수면 클리닉과 상의해 주세요. Roya는 전문적인 진료를 대신하지 않습니다.</p>
   </div>
 </section>
 
 <section id="roadmap">
-  <div class="wrap">
+  <div class="wrap-wide">
     <h2 class="sec-title" data-en="Where we are">지금 어디쯤인가요</h2>
-    <p class="sec-lede" data-en="Roya is not for sale yet. Here is the plan, and we will update this page as it changes.">Roya는 아직 판매하지 않습니다. 계획은 아래와 같고, 바뀌면 이 페이지에 그대로 적겠습니다.</p>
     <div class="road">
       <ol>
         <li class="now">
@@ -358,11 +416,11 @@ footer a:hover{color:var(--moon)}
         </li>
         <li>
           <time datetime="2027-H1" data-en="First half of 2027">2027년 상반기</time>
-          <p data-en="Pilot with a small group of participants">소규모 참가자와 파일럿</p>
+          <p data-en="Pilot with a small group">소규모 파일럿</p>
         </li>
         <li>
           <time datetime="2027" data-en="After that">그 이후</time>
-          <p data-en="Official launch">정식 출시</p>
+          <p data-en="Launch">정식 출시</p>
         </li>
       </ol>
     </div>
@@ -372,7 +430,7 @@ footer a:hover{color:var(--moon)}
 <section id="waitlist">
   <div class="wrap">
     <h2 class="sec-title" data-en="Waitlist">대기자 신청</h2>
-    <p class="sec-lede" data-en="Leave your email and we will write when the pilot opens. No newsletters, no sharing with anyone else.">이메일을 남겨 주시면 파일럿이 열릴 때 알려드립니다. 뉴스레터를 보내거나 다른 곳에 전달하지 않습니다.</p>
+    <p class="sec-lede" data-en="Leave your email; we write once, when the pilot opens.">이메일을 남겨 주세요. 파일럿이 열릴 때 한 번 알려드립니다.</p>
 
     <form class="form" id="waitlist-form" novalidate>
       <div class="field">
@@ -381,13 +439,13 @@ footer a:hover{color:var(--moon)}
       </div>
       <div class="field">
         <label for="night" data-en="What kind of night is hardest for you? <span>(optional)</span>">가장 힘든 밤은 어떤 밤인가요? <span>(선택)</span></label>
-        <textarea id="night" name="night" maxlength="500" data-en-placeholder="Write as much or as little as you like." placeholder="편하게, 짧게 적어 주셔도 됩니다."></textarea>
+        <textarea id="night" name="night" maxlength="500" data-en-placeholder="A line is enough." placeholder="한 줄이면 충분합니다."></textarea>
       </div>
       <label class="check">
         <input type="checkbox" id="consent" name="consent" required>
-        <span data-en="I agree to the collection and use of my personal information. Purpose: waitlist updates · Items: email and the optional answer above · Kept: until one year after launch, or until you withdraw. <a href='privacy.html'>Privacy notice</a>">개인정보 수집·이용에 동의합니다. 목적: 대기자 안내 · 항목: 이메일, 선택 답변 · 보유: 서비스 출시 후 1년 또는 철회 시까지. <a href="privacy.html">개인정보처리방침</a></span>
+        <span data-en="I agree to the collection and use of my personal information. Purpose: waitlist updates · Items: email and the optional answer · Kept: until one year after launch, or until you withdraw. <a href='privacy.html'>Privacy notice</a>">개인정보 수집·이용에 동의합니다. 목적: 대기자 안내 · 항목: 이메일, 선택 답변 · 보유: 서비스 출시 후 1년 또는 철회 시까지. <a href="privacy.html">개인정보처리방침</a></span>
       </label>
-      <button class="cta" type="submit" id="submit-btn" data-en="Join the waitlist">대기자 신청하기</button>
+      <button class="cta" type="submit" id="submit-btn" data-en="Join the waitlist">대기자 신청</button>
       <p class="form-msg" id="form-msg" aria-live="polite"></p>
     </form>
 
@@ -396,16 +454,14 @@ footer a:hover{color:var(--moon)}
       <h3 data-en="Thank you. You are on the list.">고맙습니다. 명단에 올려 두었습니다.</h3>
       <p data-en="We will email you when the pilot opens. To withdraw, reply to that email or write to hello@roya.ai.kr.">파일럿이 열리면 이메일로 알려드리겠습니다. 철회하려면 그 메일에 답장하거나 hello@roya.ai.kr로 알려 주세요.</p>
     </div>
-
-    <p class="fine" data-en="Questions? hello@roya.ai.kr">문의: hello@roya.ai.kr</p>
   </div>
 </section>
 </main>
 
 <footer>
-  <div class="wrap">
+  <div class="wrap-wide">
     <span>© 2026 Roya · Bahareh Toushkan · Seoul</span>
-    <span><a href="privacy.html" data-en="Privacy notice">개인정보처리방침</a></span>
+    <span>hello@roya.ai.kr · <a href="privacy.html" data-en="Privacy notice">개인정보처리방침</a></span>
   </div>
 </footer>
 
@@ -415,14 +471,10 @@ footer a:hover{color:var(--moon)}
    - Leave empty ("") to fall back to a prefilled mailto: link.
    - Formspree: create a form at formspree.io, then set
        const WAITLIST_ENDPOINT = "https://formspree.io/f/XXXXXXXX";
-     Formspree accepts JSON with the "Accept: application/json" header below.
    - Google Apps Script: deploy a Web App (doPost) that appends
      JSON.parse(e.postData.contents) to a Sheet and returns
      ContentService.createTextOutput("ok"). Set
        const WAITLIST_ENDPOINT = "https://script.google.com/macros/s/.../exec";
-     Apps Script redirects POST requests, so the fetch below uses
-     mode "no-cors" when the host is script.google.com and treats
-     "no response" as success.
    ========================================================= */
 const WAITLIST_ENDPOINT = "";
 const WAITLIST_MAILTO = "hello@roya.ai.kr";
@@ -433,7 +485,9 @@ const WAITLIST_MAILTO = "hello@roya.ai.kr";
   nodes.forEach(n => { n.dataset.ko = n.innerHTML; });
   const ph = document.querySelectorAll("[data-en-placeholder]");
   ph.forEach(n => { n.dataset.koPlaceholder = n.placeholder; });
-  const titles = { ko: document.title, en: "Roya — records arousal signals during sleep and supports calming, gently" };
+  const laneKo = ["REM", "얕은 잠", "깊은 잠"], laneEn = ["REM", "Light", "Deep"];
+  const lanes = document.querySelectorAll(".night .lane-label");
+  const titles = { ko: document.title, en: "Roya — reads arousal signals inside REM sleep and calms, gently" };
   const msgs = {
     ko: { need:"이메일과 동의 체크가 필요합니다.", bad:"이메일 형식을 확인해 주세요.", sending:"보내는 중…", fail:"전송에 실패했습니다. 메일 앱으로 대신 보냅니다.", mail:"메일 앱이 열립니다. 보내기 버튼을 눌러 주세요." },
     en: { need:"Email and the consent box are required.", bad:"Please check the email format.", sending:"Sending…", fail:"Sending failed. Opening your mail app instead.", mail:"Your mail app will open. Press send there." }
@@ -444,6 +498,7 @@ const WAITLIST_MAILTO = "hello@roya.ai.kr";
     lang = l;
     nodes.forEach(n => { n.innerHTML = (l === "en") ? n.dataset.en : n.dataset.ko; });
     ph.forEach(n => { n.placeholder = (l === "en") ? n.dataset.enPlaceholder : n.dataset.koPlaceholder; });
+    lanes.forEach((n, i) => { n.textContent = (l === "en") ? laneEn[i] : laneKo[i]; });
     document.documentElement.lang = l;
     document.title = titles[l];
     document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
@@ -471,11 +526,9 @@ const WAITLIST_MAILTO = "hello@roya.ai.kr";
   function mailto(email, night){
     const m = window.__royaMsgs();
     const body = [
-      "Roya waitlist",
-      "",
+      "Roya waitlist", "",
       "Email: " + email,
-      "가장 힘든 밤 / Hardest night: " + (night || "-"),
-      "",
+      "가장 힘든 밤 / Hardest night: " + (night || "-"), "",
       "개인정보 수집·이용 동의 / Consent: yes",
       "Lang: " + window.__royaLang()
     ].join("\n");
