@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="Roya 마크 — 잠든 초승달">
+  <defs>
+    <linearGradient id="moon" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0" stop-color="#f6ead0"/>
+      <stop offset="1" stop-color="#dcc58e"/>
+    </linearGradient>
+    <mask id="cut">
+      <rect width="96" height="96" fill="#000"/>
+      <circle cx="46" cy="50" r="30" fill="#fff"/>
+      <circle cx="60" cy="40" r="27" fill="#000"/>
+    </mask>
+  </defs>
+  <!-- crescent: outer disc minus a shifted disc, tilted like a resting face -->
+  <rect width="96" height="96" fill="url(#moon)" mask="url(#cut)"/>
+  <!-- closed eye: one calm arc on the lit limb, plus a short lash -->
+  <path d="M22 47 q7 6 14 0" fill="none" stroke="#2a2f55" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M37.5 46.5 l3 -2" fill="none" stroke="#2a2f55" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- one four-point star: the dream -->
+  <path d="M76 16 l2.4 6.4 L84.8 24.8 l-6.4 2.4 L76 33.6 l-2.4 -6.4 L67.2 24.8 l6.4 -2.4 Z" fill="#b9b4f3"/>
+  <circle cx="86" cy="52" r="1.8" fill="#b9b4f3" opacity=".9"/>
+</svg>

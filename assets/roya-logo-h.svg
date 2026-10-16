@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 96" width="320" height="96" role="img" aria-label="Roya">
+  <defs>
+    <linearGradient id="moon" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0" stop-color="#f6ead0"/>
+      <stop offset="1" stop-color="#dcc58e"/>
+    </linearGradient>
+    <mask id="cut">
+      <rect width="96" height="96" fill="#000"/>
+      <circle cx="46" cy="50" r="30" fill="#fff"/>
+      <circle cx="60" cy="40" r="27" fill="#000"/>
+    </mask>
+  </defs>
+  <rect width="96" height="96" fill="url(#moon)" mask="url(#cut)"/>
+  <path d="M22 47 q7 6 14 0" fill="none" stroke="#2a2f55" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M37.5 46.5 l3 -2" fill="none" stroke="#2a2f55" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M76 16 l2.4 6.4 L84.8 24.8 l-6.4 2.4 L76 33.6 l-2.4 -6.4 L67.2 24.8 l6.4 -2.4 Z" fill="#b9b4f3"/>
+  <text x="108" y="68" font-family="Fraunces, 'Iowan Old Style', Georgia, serif" font-style="italic" font-weight="300" font-size="62" fill="#ece7d9" letter-spacing="-1">Roya</text>
+</svg>

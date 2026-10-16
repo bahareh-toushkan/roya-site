@@ -10,9 +10,10 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://roya.ai.kr/">
 <meta name="theme-color" content="#101830">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23101830'/%3E%3Cpath d='M38 16A18 18 0 1 1 38 48A20 20 0 0 0 38 16Z' fill='%23e5d1a0'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="assets/roya-mark.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ---------- tokens ---------- */
@@ -31,14 +32,17 @@
   --measure:34rem;
   --wide:66rem;
   --gutter:clamp(16px, 5vw, 48px);
-  --sans:"Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --sans:"Pretendard Variable", Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
   --serif:"Fraunces", "Iowan Old Style", Georgia, serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
 @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
 body{
-  margin:0; background:var(--night); color:var(--moon);
+  margin:0; color:var(--moon);
+  background:var(--night);
+  background-image:linear-gradient(180deg, #0c1230 0%, #121a3a 38%, #101830 100%);
+  background-attachment:fixed;
   font-family:var(--sans); font-size:17px; line-height:1.7;
   word-break:keep-all; overflow-wrap:anywhere; -webkit-font-smoothing:antialiased;
 }
@@ -63,9 +67,12 @@ p{margin:0}
 }
 @supports not (background:color-mix(in srgb, red 50%, transparent)){ .top{background:rgba(16,24,48,.9)} }
 .brand{display:inline-flex; align-items:center; gap:10px; text-decoration:none; color:var(--moon); font-family:var(--serif); font-style:italic; font-size:22px; font-weight:400; letter-spacing:.01em}
-.brand svg{width:26px; height:26px}
+.brand img{width:28px; height:28px; display:block}
 .top nav{display:flex; align-items:center; gap:18px}
-.top nav a{color:var(--moon-dim); text-decoration:none; font-size:15px}
+.top nav a{color:var(--moon-dim); text-decoration:none; font-size:14px; opacity:.85}
+.top nav a.pill{display:none; padding:7px 14px; border:1px solid var(--haze); border-radius:999px; color:var(--moon); opacity:1}
+.top nav a.pill:hover{border-color:var(--lilac); color:var(--lilac)}
+@media (min-width:720px){ .top nav a.pill{display:inline-block} }
 .top nav a:hover{color:var(--moon)}
 .top nav a.hide-sm{display:none}
 @media (min-width:720px){ .top nav a.hide-sm{display:inline} }
@@ -74,17 +81,25 @@ p{margin:0}
 .lang button[aria-pressed="true"]{background:var(--moon); color:var(--night)}
 
 /* ---------- hero ---------- */
-.hero{position:relative; overflow:hidden; padding:clamp(56px, 10vh, 104px) 0 0; isolation:isolate}
+.hero{position:relative; overflow:hidden; padding:clamp(48px, 8vh, 88px) 0 0; isolation:isolate}
 .sky{position:absolute; inset:0; z-index:-1; pointer-events:none}
 .sky .halo{
-  position:absolute; left:50%; top:30%;
+  position:absolute; left:50%; top:34%;
   width:min(80vw, 560px); aspect-ratio:1; border-radius:50%;
   transform:translate(-50%,-50%);
   background:radial-gradient(circle, rgba(185,180,243,.22) 0%, rgba(185,180,243,.08) 38%, rgba(16,24,48,0) 68%);
   animation:breathe 8s ease-in-out infinite;
 }
+.sky .nebula{position:absolute; border-radius:50%; filter:blur(60px); pointer-events:none}
+.sky .nebula.a{left:-10%; top:18%; width:46vw; height:46vw; max-width:620px; max-height:620px; background:radial-gradient(circle, rgba(124,96,210,.30) 0%, rgba(124,96,210,.10) 45%, transparent 70%)}
+.sky .nebula.b{right:-8%; top:4%; width:52vw; height:52vw; max-width:700px; max-height:700px; background:radial-gradient(circle, rgba(92,120,230,.22) 0%, rgba(140,90,200,.10) 45%, transparent 70%)}
 .sky .stars{position:absolute; inset:0; width:100%; height:100%}
-.sky .stars circle{fill:var(--moon); opacity:.45}
+.sky .stars circle{fill:var(--moon); opacity:.5}
+@media (prefers-reduced-motion:no-preference){
+  .sky .stars circle:nth-child(3n){animation:twinkle 5s ease-in-out infinite}
+  .sky .stars circle:nth-child(3n+1){animation:twinkle 7s ease-in-out 1.5s infinite}
+  @keyframes twinkle{0%,100%{opacity:.25} 50%{opacity:.8}}
+}
 @keyframes breathe{
   0%,100%{transform:translate(-50%,-50%) scale(.86); opacity:.75}
   50%{transform:translate(-50%,-50%) scale(1.08); opacity:1}
@@ -96,20 +111,23 @@ p{margin:0}
   font-size:clamp(72px, 16vw, 132px); line-height:1; letter-spacing:-.01em; color:var(--moon);
   font-variation-settings:"opsz" 144;
 }
-.wordmark small{display:block; font-family:var(--sans); font-style:normal; font-weight:400; font-size:14px; letter-spacing:.12em; color:var(--moon-dim); margin-top:12px}
+.moon-mark{width:clamp(72px, 10vw, 96px); height:auto; display:block; margin:0 auto 6px; filter:drop-shadow(0 0 18px rgba(229,209,160,.45)) drop-shadow(0 0 48px rgba(229,209,160,.18))}
+.promise .k{color:var(--lilac)}
+.promise .g{color:var(--gold)}
 .promise{font-size:clamp(20px, 2.8vw, 26px); line-height:1.5; margin:30px auto 0; max-width:22em; font-weight:500}
 .hero-note{color:var(--moon-dim); font-size:15px; margin-top:12px}
 .cta-row{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:28px}
 .cta{
   display:inline-flex; align-items:center; justify-content:center; gap:8px;
-  min-height:50px; padding:12px 26px;
-  border-radius:999px; border:1px solid var(--lilac);
-  background:var(--lilac); color:var(--night); font-weight:500; font-size:16px;
-  text-decoration:none; transition:background .2s, border-color .2s;
+  min-height:50px; padding:12px 28px;
+  border-radius:999px; border:1px solid rgba(185,180,243,.9);
+  background:linear-gradient(135deg, #cbc6ff 0%, #a79ff0 100%); color:var(--night); font-weight:600; font-size:16px;
+  text-decoration:none; transition:transform .2s, box-shadow .2s, background .2s;
+  box-shadow:0 0 0 1px rgba(185,180,243,.25), 0 8px 28px rgba(139,133,217,.35), 0 0 36px rgba(185,180,243,.18);
 }
-.cta:hover{background:var(--moon); border-color:var(--moon); color:var(--night)}
-.cta.ghost{background:transparent; color:var(--lilac)}
-.cta.ghost:hover{background:rgba(185,180,243,.12); color:var(--moon)}
+.cta:hover{background:linear-gradient(135deg, #ece7d9 0%, #cbc6ff 100%); color:var(--night); box-shadow:0 0 0 1px rgba(236,231,217,.4), 0 10px 32px rgba(139,133,217,.45), 0 0 48px rgba(185,180,243,.28)}
+.cta.ghost{background:rgba(255,255,255,.04); color:var(--moon); border-color:rgba(236,231,217,.28); box-shadow:none; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); font-weight:500}
+.cta.ghost:hover{background:rgba(185,180,243,.14); border-color:var(--lilac); color:var(--moon); box-shadow:none}
 
 /* the night, in one picture */
 .night{margin:clamp(44px, 8vh, 72px) auto 0; max-width:var(--wide); padding-inline:var(--gutter)}
@@ -119,9 +137,11 @@ p{margin:0}
 .night .tick{font-family:var(--sans); font-size:12px; fill:var(--moon-dim)}
 .night .track{fill:var(--depth)}
 .night .stage{fill:var(--haze)}
-.night .rem{fill:var(--lilac)}
-.night .deep{fill:#3d4a7a}
-.night .pulse{fill:var(--gold)}
+.night .rem{fill:url(#remGrad)}
+.night .deep{fill:url(#deepGrad)}
+.night .stage{fill:url(#lightGrad)}
+.night .pulse{fill:var(--gold); filter:url(#glow)}
+.night .pulse-label{font-family:var(--sans); font-size:13px; fill:var(--gold)}
 .night .cursor{stroke:var(--moon); stroke-width:1; opacity:.55}
 .night .legend{font-family:var(--sans); font-size:13px; fill:var(--moon)}
 @media (prefers-reduced-motion:no-preference){
@@ -131,6 +151,7 @@ p{margin:0}
 @media (max-width:760px){
   .night .lane-label{font-size:26px}
   .night .tick{font-size:24px}
+  .night .pulse-label{font-size:24px}
 }
 .night figcaption{color:var(--moon-dim); font-size:14px; text-align:center; margin-top:10px}
 .night figcaption b{color:var(--moon); font-weight:500}
@@ -242,7 +263,7 @@ footer a:hover{color:var(--moon)}
 
 <header class="top">
   <a class="brand" href="#top" aria-label="Roya">
-    <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M38 16A18 18 0 1 1 38 48A20 20 0 0 0 38 16Z" fill="#e5d1a0"/></svg>
+    <img src="assets/roya-mark.svg" alt="" width="26" height="26">
     Roya
   </a>
   <nav aria-label="페이지 내 이동">
@@ -250,17 +271,19 @@ footer a:hover{color:var(--moon)}
     <a class="hide-sm" href="#evidence" data-en="Evidence">검증</a>
     <a class="hide-sm" href="#app" data-en="App">앱</a>
     <a class="hide-sm" href="#principles" data-en="Principles">원칙</a>
-    <a href="#waitlist" data-en="Waitlist">대기자 신청</a>
     <div class="lang" role="group" aria-label="Language">
       <button type="button" data-lang="ko" aria-pressed="true" lang="ko">한국어</button>
       <button type="button" data-lang="en" aria-pressed="false" lang="en">EN</button>
     </div>
+    <a class="pill" href="#waitlist" data-en="Waitlist">대기자 신청</a>
   </nav>
 </header>
 
 <main id="main">
 <section class="hero" id="top">
   <div class="sky" aria-hidden="true">
+    <div class="nebula a"></div>
+    <div class="nebula b"></div>
     <div class="halo"></div>
     <svg class="stars" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
       <circle cx="92" cy="88" r="1.2"/><circle cx="310" cy="46" r=".9"/><circle cx="540" cy="120" r="1.1"/>
@@ -268,11 +291,15 @@ footer a:hover{color:var(--moon)}
       <circle cx="160" cy="300" r="1"/><circle cx="1080" cy="320" r="1.1"/><circle cx="40" cy="480" r=".9"/>
       <circle cx="1170" cy="500" r="1"/><circle cx="420" cy="520" r=".8"/><circle cx="880" cy="540" r="1.1"/>
       <circle cx="650" cy="30" r=".9"/><circle cx="230" cy="180" r=".7"/><circle cx="960" cy="200" r=".8"/>
+      <circle cx="120" cy="420" r=".7"/><circle cx="380" cy="250" r=".6"/><circle cx="700" cy="380" r=".9"/><circle cx="830" cy="150" r=".6"/>
+      <circle cx="1120" cy="260" r=".7"/><circle cx="500" cy="440" r=".6"/><circle cx="60" cy="230" r=".8"/><circle cx="1040" cy="560" r=".7"/>
+      <circle cx="300" cy="560" r=".9"/><circle cx="590" cy="190" r=".6"/><circle cx="820" cy="470" r=".7"/><circle cx="1180" cy="150" r=".9"/>
     </svg>
   </div>
   <div class="wrap">
-    <h1 class="wordmark">Roya<small data-en="rōyā · “dream” in Persian">로야 · 페르시아어로 ‘꿈’</small></h1>
-    <p class="promise" data-en="Reads arousal signals only inside REM sleep, and calms with a gentle vibration.">REM 수면 안에서만 각성 신호를 읽고, 부드러운 진동으로 완화를 돕습니다.</p>
+    <img class="moon-mark" src="assets/roya-mark.svg" alt="" width="96" height="96">
+    <h1 class="wordmark">Roya</h1>
+    <p class="promise" data-en="Reads <span class='k'>arousal signals</span> only inside <span class='k'>REM sleep</span>, and calms with a <span class='g'>gentle vibration</span>."><span class="k">REM 수면</span> 안에서만 <span class="k">각성 신호</span>를 읽고, <span class="g">부드러운 진동</span>으로 완화를 돕습니다.</p>
     <p class="hero-note" data-en="A wellness prototype, not a medical device. Pilot in 2027.">웰니스 프로토타입이며 의료기기가 아닙니다. 2027년 파일럿.</p>
     <div class="cta-row">
       <a class="cta" href="#waitlist" data-en="Join the waitlist">대기자 신청</a>
@@ -282,9 +309,15 @@ footer a:hover{color:var(--moon)}
 
   <div class="night">
     <figure>
-      <svg viewBox="0 0 1000 170" role="img" aria-labelledby="night-title night-desc">
+      <svg viewBox="0 0 1000 170" role="img" aria-labelledby="night-title night-desc" overflow="visible">
         <title id="night-title">하룻밤의 수면 단계와 Roya의 개입 지점</title>
         <desc id="night-desc">밤 전체를 가로 막대로 표시한 그림. 얕은 잠과 깊은 잠 사이에 REM 구간 세 개가 밝게 표시되고, 그중 두 곳에 부드러운 진동을 뜻하는 작은 점이 있다. REM 밖에는 아무 표시가 없다.</desc>
+        <defs>
+          <linearGradient id="remGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfcaff"/><stop offset="1" stop-color="#9b94e6"/></linearGradient>
+          <linearGradient id="lightGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a5a92"/><stop offset="1" stop-color="#2f3b64"/></linearGradient>
+          <linearGradient id="deepGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5563a8"/><stop offset="1" stop-color="#3a4576"/></linearGradient>
+          <filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
         <!-- lane labels -->
         <text class="lane-label" x="0" y="48">REM</text>
         <text class="lane-label" x="0" y="84">얕은 잠</text>
@@ -308,8 +341,9 @@ footer a:hover{color:var(--moon)}
         <rect class="rem" x="660" y="36" width="100" height="16" rx="8"/>
         <rect class="rem" x="830" y="36" width="70" height="16" rx="8"/>
         <!-- gentle vibration marks, only inside REM -->
-        <circle class="pulse" cx="712" cy="44" r="5"/>
-        <circle class="pulse" cx="866" cy="44" r="5"/>
+        <text class="pulse-label" x="712" y="22" text-anchor="middle">부드러운 진동</text>
+        <circle class="pulse" cx="712" cy="44" r="4.5"/>
+        <circle class="pulse" cx="866" cy="44" r="4.5"/>
         <!-- sweeping "now" line -->
         <line class="cursor" x1="80" y1="30" x2="80" y2="130"/>
         <!-- ticks -->
@@ -460,7 +494,7 @@ footer a:hover{color:var(--moon)}
 
 <footer>
   <div class="wrap-wide">
-    <span>© 2026 Roya · Bahareh Toushkan · Seoul</span>
+    <span data-en="Roya (رویا) — “dream” in Persian · © 2026 Roya · Bahareh Toushkan · Seoul">Roya(رویا) — 페르시아어로 ‘꿈’ · © 2026 Roya · Bahareh Toushkan · Seoul</span>
     <span>hello@roya.ai.kr · <a href="privacy.html" data-en="Privacy notice">개인정보처리방침</a></span>
   </div>
 </footer>
@@ -487,6 +521,7 @@ const WAITLIST_MAILTO = "hello@roya.ai.kr";
   ph.forEach(n => { n.dataset.koPlaceholder = n.placeholder; });
   const laneKo = ["REM", "얕은 잠", "깊은 잠"], laneEn = ["REM", "Light", "Deep"];
   const lanes = document.querySelectorAll(".night .lane-label");
+  const pulseLabel = document.querySelector(".night .pulse-label");
   const titles = { ko: document.title, en: "Roya — reads arousal signals inside REM sleep and calms, gently" };
   const msgs = {
     ko: { need:"이메일과 동의 체크가 필요합니다.", bad:"이메일 형식을 확인해 주세요.", sending:"보내는 중…", fail:"전송에 실패했습니다. 메일 앱으로 대신 보냅니다.", mail:"메일 앱이 열립니다. 보내기 버튼을 눌러 주세요." },
@@ -499,6 +534,7 @@ const WAITLIST_MAILTO = "hello@roya.ai.kr";
     nodes.forEach(n => { n.innerHTML = (l === "en") ? n.dataset.en : n.dataset.ko; });
     ph.forEach(n => { n.placeholder = (l === "en") ? n.dataset.enPlaceholder : n.dataset.koPlaceholder; });
     lanes.forEach((n, i) => { n.textContent = (l === "en") ? laneEn[i] : laneKo[i]; });
+    if (pulseLabel) pulseLabel.textContent = (l === "en") ? "gentle vibration" : "부드러운 진동";
     document.documentElement.lang = l;
     document.title = titles[l];
     document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
