@@ -245,6 +245,7 @@ section.band{background:var(--deep)}
 .form button[disabled]{opacity:.6; cursor:wait}
 .form-msg{font-size:15px; color:var(--moon-dim); min-height:1.5em}
 .form-msg.err{color:var(--danger)}
+.hp{position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden} /* 봇 방지용 숨은 칸 — 사람에게는 안 보임 */
 .thanks{display:none; padding:28px 0 0}
 .thanks[data-show]{display:block}
 .thanks h3{font-size:22px; margin-bottom:8px}
@@ -479,6 +480,7 @@ footer a:hover{color:var(--moon)}
         <input type="checkbox" id="consent" name="consent" required>
         <span data-en="I agree to the collection and use of my personal information. Purpose: waitlist updates · Items: email and the optional answer · Kept: until one year after launch, or until you withdraw. <a href='privacy.html'>Privacy notice</a>">개인정보 수집·이용에 동의합니다. 목적: 대기자 안내 · 항목: 이메일, 선택 답변 · 보유: 서비스 출시 후 1년 또는 철회 시까지. <a href="privacy.html">개인정보처리방침</a></span>
       </label>
+      <div class="hp" aria-hidden="true"><label for="website">Website</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div> <!-- 봇 방지: 사람은 비워 둠, 채워지면 Apps Script가 저장하지 않음 -->
       <button class="cta" type="submit" id="submit-btn" data-en="Join the waitlist">대기자 신청</button>
       <p class="form-msg" id="form-msg" aria-live="polite"></p>
     </form>
@@ -501,16 +503,11 @@ footer a:hover{color:var(--moon)}
 
 <script>
 /* =========================================================
-   WAITLIST_ENDPOINT
-   - Leave empty ("") to fall back to a prefilled mailto: link.
-   - Formspree: create a form at formspree.io, then set
-       const WAITLIST_ENDPOINT = "https://formspree.io/f/XXXXXXXX";
-   - Google Apps Script: deploy a Web App (doPost) that appends
-     JSON.parse(e.postData.contents) to a Sheet and returns
-     ContentService.createTextOutput("ok"). Set
-       const WAITLIST_ENDPOINT = "https://script.google.com/macros/s/.../exec";
+   WAITLIST_ENDPOINT — Google Apps Script 웹 앱 「Roya 대기자 수신」 (2026-10-20 연결)
+   - 받은 신청은 joyyoxyt 드라이브의 시트 「Roya 대기자」에 한 줄씩 쌓임
+   - 비워 두면("") 메일 앱(mailto:)으로 대신 보냄
    ========================================================= */
-const WAITLIST_ENDPOINT = "";
+const WAITLIST_ENDPOINT = "https://script.google.com/macros/s/AKfycbz1un3diROvNRFXrynfIW5JcdVtOFNHWm07JvyCnyWfPR50frWdmgVJxNN1_CbzHj4nhw/exec"; // 2026-10-20: 웹 앱 v1 주소 연결
 const WAITLIST_MAILTO = "hello@roya.ai.kr";
 
 /* ---------- language toggle ---------- */
@@ -588,7 +585,7 @@ const WAITLIST_MAILTO = "hello@roya.ai.kr";
 
     btn.disabled = true;
     msg.textContent = m.sending;
-    const payload = { email, night, consent:true, lang: window.__royaLang(), source:"roya.ai.kr", ts:new Date().toISOString() };
+    const payload = { email, night, consent:true, lang: window.__royaLang(), source:"roya.ai.kr", ts:new Date().toISOString(), website: form.website.value }; // website = 봇 방지 숨은 칸 값
     const isAppsScript = /script\.google\.com/.test(WAITLIST_ENDPOINT);
     try{
       const res = await fetch(WAITLIST_ENDPOINT, {
