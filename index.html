@@ -383,7 +383,7 @@ footer a:hover{color:var(--moon)}
 <section id="evidence" class="band">
   <div class="wrap-wide">
     <h2 class="sec-title" data-en="Tested on public data">공개 데이터로 검증했습니다</h2>
-    <p class="sec-lede" data-en="Both steps were checked separately on published sleep datasets before any hardware was bought.">기기를 사기 전에, 두 단계를 공개 수면 데이터로 각각 확인했습니다.</p>
+    <p class="sec-lede" data-en="Before any hardware was bought, the first step — the REM gate — was checked on published sleep data. The second-step model is being re-validated.">기기를 사기 전에, 첫 단계인 REM 게이트를 공개 수면 데이터로 먼저 확인했습니다. 둘째 단계 모델은 재검증 중입니다.</p>
     <div class="nums">
       <div class="num">
         <b>0.93<i>AUC</i></b>
@@ -394,11 +394,11 @@ footer a:hover{color:var(--moon)}
         <span data-en="Same gate on an unseen group from another clinic · 22 people">다른 병원·장비의 새 데이터에서도 유지 · 22명</span>
       </div>
       <div class="num">
-        <b>0.82<i>AUC</i></b>
-        <span data-en="Arousal candidates inside REM from wrist signals · 20 people">REM 안 각성 후보 탐지, 손목 신호 · 20명</span>
+        <b data-en="0.71<i>sensitivity</i>">0.71<i>민감도</i></b>
+        <span data-en="Gate sensitivity at 0.95 specificity — tuned to avoid needless vibration first">특이도 0.95에서의 게이트 민감도 — 불필요한 진동을 먼저 막는 기준</span>
       </div>
     </div>
-    <p class="fine-print" data-en="Subject-level cross-validation on Sleep-EDF Expanded (PhysioNet) and DREAMT. These are research results on public datasets, not a measure of what Roya does for any individual.">Sleep-EDF Expanded(PhysioNet)와 DREAMT에서 피험자 단위 교차검증. 공개 데이터의 연구 결과이며, 개인에게 어떤 효과가 있다는 뜻이 아닙니다.</p>
+    <p class="fine-print" data-en="Subject-level cross-validation on Sleep-EDF Expanded (PhysioNet). The arousal-candidate model inside REM is being retrained without the signal used to build its label; its earlier figure is withheld until then. These are research results on public datasets, not a measure of what Roya does for any individual.">Sleep-EDF Expanded(PhysioNet)에서 피험자 단위 교차검증. REM 안 각성 후보 모델은 라벨 구성에 쓴 신호를 빼고 다시 학습하는 중이라, 그 전까지 이전 수치는 싣지 않습니다. 공개 데이터의 연구 결과이며, 개인에게 어떤 효과가 있다는 뜻이 아닙니다.</p>
   </div>
 </section>
 
