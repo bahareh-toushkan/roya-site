@@ -192,6 +192,40 @@ input[type=range]{width:100%; height:44px; margin:0; accent-color:var(--lilac); 
 .fb button[aria-pressed="true"]{border-color:var(--lilac); background:rgba(185,180,243,.14); color:var(--moon)}
 .fb-note{font-size:13px; color:var(--moon-dim); margin-top:10px; min-height:1.4em}
 
+/* report v2 (2026-10-29 팀 미팅: Figma 레이아웃 차용 · 기능·색 동일) */
+.rp-pill{display:inline-flex; align-items:center; gap:7px; padding:5px 11px; border-radius:999px; font-size:12px; color:var(--lilac); background:rgba(185,180,243,.12); border:1px solid rgba(185,180,243,.35); margin:2px 0 14px}
+.rp-pill i{width:7px; height:7px; border-radius:50%; background:var(--lilac)}
+.rp-card{background:var(--depth); border:1px solid var(--haze); border-radius:18px; padding:16px; margin:0 0 12px}
+.rp-card h3{margin:0 0 10px; font-size:13px; font-weight:500; color:var(--moon-dim); letter-spacing:.02em}
+.rp-sum{display:grid; grid-template-columns:1fr 96px; align-items:center; gap:10px}
+.rp-sum .big{font-family:var(--serif); font-weight:400; font-size:34px; line-height:1.05; color:var(--moon)}
+.rp-sum .sm{font-size:13px; color:var(--moon-dim); margin-top:8px; line-height:1.55}
+.rp-sum .sm b{color:var(--moon); font-weight:500}
+.rp-sum .sm b.gold{color:var(--gold)}
+.rp-ring{position:relative; width:96px; height:96px}
+.rp-ring svg{width:96px; height:96px; transform:rotate(-90deg); display:block}
+.rp-ring .c{position:absolute; inset:0; display:grid; place-items:center; align-content:center; font-size:11px; color:var(--moon-dim); line-height:1.1}
+.rp-ring .c b{font-family:var(--serif); font-weight:400; font-size:21px; color:var(--moon)}
+.rp-dist{display:grid; grid-template-columns:108px 1fr; gap:14px; align-items:center}
+.rp-dist svg{width:108px; height:108px; display:block}
+.rp-dist ul{list-style:none; margin:0; padding:0; font-size:13px}
+.rp-dist li{display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid var(--haze-soft); color:var(--moon-dim)}
+.rp-dist li:last-child{border-bottom:0}
+.rp-dist li i{width:9px; height:9px; border-radius:50%; display:inline-block; flex:none}
+.rp-dist li b{margin-left:auto; color:var(--moon); font-weight:500}
+.rp-card .chart{margin:0}
+.rp-card .legend{margin:8px 0 0}
+.rp-ev{border-color:rgba(229,209,160,.5); background:linear-gradient(180deg, rgba(229,209,160,.07), var(--depth))}
+.rp-ev h3{color:var(--gold); display:flex; align-items:center; font-size:14px; font-weight:500}
+.rp-ev h3 .n{margin-left:auto; background:rgba(229,209,160,.16); color:var(--gold); border-radius:999px; padding:2px 10px; font-size:12px}
+.rp-ev .r{display:flex; justify-content:space-between; align-items:center; gap:8px; background:rgba(16,24,48,.55); border-radius:12px; padding:10px 12px; margin-top:8px; font-size:13px; color:var(--moon-dim)}
+.rp-ev .r b{color:var(--moon); font-weight:500; font-size:14px}
+.rp-facts{list-style:none; margin:0 0 12px; padding:0; display:grid; gap:8px}
+.rp-facts li{display:flex; gap:12px; background:var(--depth); border:1px solid var(--haze); border-radius:14px; padding:11px 14px; font-size:13px; line-height:1.5; color:var(--moon-dim)}
+.rp-facts li b{font-family:var(--serif); font-style:italic; color:var(--lilac); font-weight:400; min-width:20px}
+.rp-card.fbk h3{font-size:16px; font-weight:500; color:var(--moon); margin-bottom:4px}
+.rp-card.fbk .hint{font-size:13px; color:var(--moon-dim); margin:0 0 10px}
+
 /* data */
 .pill{display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:999px; background:rgba(169,216,184,.12); color:var(--ok); font-size:13px; margin-bottom:16px}
 .pill i{width:8px; height:8px; border-radius:50%; background:var(--ok)}
@@ -342,63 +376,105 @@ input[type=range]{width:100%; height:44px; margin:0; accent-color:var(--lilac); 
     <section class="screen" id="s-report" aria-label="아침 리포트">
       <div class="bar"><span>10월 14일 수요일</span><span class="step">5 / 6</span></div>
       <div class="scroll">
-        <h2>좋은 아침입니다</h2>
-        <p class="lede">어젯밤 기록입니다. 수치는 내 기기에서만 계산했고, 아무 데도 보내지 않았습니다.</p>
-
-        <div class="kpis">
-          <div class="kpi"><b>7시간 48분</b><span>기록 시간 · 23:41–07:29</span></div>
-          <div class="kpi"><b>2회</b><span>완화 보조 (부드러운 진동)</span></div>
-        </div>
-
+        <h2>아침 리포트</h2>
+        <div class="rp-pill"><i></i>수치는 내 기기에서만 계산 · 아무 데도 보내지 않음</div>
         <p class="example">예시 데이터입니다. 실제 측정값이 아닙니다.</p>
-        <div class="chart" role="img" aria-label="수면 단계 띠 그래프 예시. 깸, REM, 얕은 잠, 깊은 잠이 밤 동안 번갈아 나타나고, REM 구간 두 곳에 완화 보조 표시가 있습니다.">
-          <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
-            <!-- stage rows: W y=18, R y=48, L y=78, D y=108 ; x 20..330 = 23:41..07:29 (468 min) -->
-            <g font-family="Noto Sans KR, sans-serif" font-size="10" fill="#b7b3a8">
-              <text x="0" y="28">깸</text><text x="0" y="58">REM</text><text x="0" y="88">얕은</text><text x="0" y="118">깊은</text>
-            </g>
-            <g stroke="#223052" stroke-width="1">
-              <line x1="20" y1="24" x2="330" y2="24"/><line x1="20" y1="54" x2="330" y2="54"/><line x1="20" y1="84" x2="330" y2="84"/><line x1="20" y1="114" x2="330" y2="114"/>
-            </g>
-            <!-- bands -->
-            <g>
-              <rect x="20"  y="18" width="14" height="12" rx="2" fill="#b7b3a8"/>
-              <rect x="34"  y="78" width="22" height="12" rx="2" fill="#8b85d9"/>
-              <rect x="56"  y="108" width="40" height="12" rx="2" fill="#4f4a9c"/>
-              <rect x="96"  y="78" width="16" height="12" rx="2" fill="#8b85d9"/>
-              <rect x="112" y="48" width="18" height="12" rx="2" fill="#e5d1a0"/>
-              <rect x="130" y="78" width="20" height="12" rx="2" fill="#8b85d9"/>
-              <rect x="150" y="108" width="28" height="12" rx="2" fill="#4f4a9c"/>
-              <rect x="178" y="78" width="14" height="12" rx="2" fill="#8b85d9"/>
-              <rect x="192" y="48" width="30" height="12" rx="2" fill="#e5d1a0"/>
-              <rect x="222" y="78" width="26" height="12" rx="2" fill="#8b85d9"/>
-              <rect x="248" y="18" width="6"  height="12" rx="2" fill="#b7b3a8"/>
-              <rect x="254" y="78" width="22" height="12" rx="2" fill="#8b85d9"/>
-              <rect x="276" y="48" width="38" height="12" rx="2" fill="#e5d1a0"/>
-              <rect x="314" y="78" width="8"  height="12" rx="2" fill="#8b85d9"/>
-              <rect x="322" y="18" width="8"  height="12" rx="2" fill="#b7b3a8"/>
-            </g>
-            <!-- soothe events inside REM -->
-            <g fill="none" stroke="#ece7d9" stroke-width="1.2">
-              <circle cx="206" cy="54" r="5"/><circle cx="296" cy="54" r="5"/>
-            </g>
-            <g fill="#ece7d9"><circle cx="206" cy="54" r="1.6"/><circle cx="296" cy="54" r="1.6"/></g>
-            <!-- time axis -->
-            <g font-family="Noto Sans KR, sans-serif" font-size="10" fill="#b7b3a8" text-anchor="middle">
-              <text x="20" y="140" text-anchor="start">23:41</text><text x="99" y="140">01:40</text><text x="178" y="140">03:40</text><text x="257" y="140">05:40</text><text x="330" y="140" text-anchor="end">07:29</text>
-            </g>
-          </svg>
-        </div>
-        <div class="legend" aria-hidden="true">
-          <span><i style="background:#b7b3a8"></i>깸</span><span><i style="background:#e5d1a0"></i>REM</span><span><i style="background:#8b85d9"></i>얕은 잠</span><span><i style="background:#4f4a9c"></i>깊은 잠</span><span><i style="background:#ece7d9; border-radius:50%"></i>완화 보조</span>
+
+        <!-- 요약: 큰 숫자 + REM 비율 게이지 (점수 아님) -->
+        <div class="rp-card">
+          <div class="rp-sum">
+            <div>
+              <div class="big">7시간 48분</div>
+              <div class="sm">취침 <b>23:41</b> &nbsp; 기상 <b>07:29</b><br>완화 보조 <b class="gold">2회</b> · 모두 REM 안에서</div>
+            </div>
+            <div class="rp-ring" role="img" aria-label="REM 비율 22%">
+              <svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="40" fill="none" stroke="#223052" stroke-width="9"/><circle cx="48" cy="48" r="40" fill="none" stroke="#e5d1a0" stroke-width="9" stroke-linecap="round" stroke-dasharray="55.3 251.3"/></svg>
+              <div class="c"><b>22%</b>REM</div>
+            </div>
+          </div>
         </div>
 
-        <ul class="events">
-          <li><b>04:21 · REM</b><span>완화 보조 · 세기 1</span></li>
-          <li><b>06:36 · REM</b><span>완화 보조 · 세기 1</span></li>
+        <!-- 수면 단계 분포 (띠 그래프와 같은 데이터·같은 4색) -->
+        <div class="rp-card">
+          <h3>수면 단계 분포</h3>
+          <div class="rp-dist">
+            <svg viewBox="0 0 120 120" role="img" aria-label="수면 단계 분포: REM 22%, 깊은 잠 25%, 얕은 잠 49%, 깸 4%">
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#2b3759" stroke-width="16"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#e5d1a0" stroke-width="16" stroke-dasharray="63.6 289" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#8b85d9" stroke-width="16" stroke-dasharray="141.6 289" stroke-dashoffset="-63.6" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#4f4a9c" stroke-width="16" stroke-dasharray="72.3 289" stroke-dashoffset="-205.2" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#b7b3a8" stroke-width="16" stroke-dasharray="11.5 289" stroke-dashoffset="-277.5" transform="rotate(-90 60 60)"/>
+            </svg>
+            <ul aria-hidden="true">
+              <li><i style="background:#e5d1a0"></i>REM <b>22%</b></li>
+              <li><i style="background:#4f4a9c"></i>깊은 잠 <b>25%</b></li>
+              <li><i style="background:#8b85d9"></i>얕은 잠 <b>49%</b></li>
+              <li><i style="background:#b7b3a8"></i>깸 <b>4%</b></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 밤 타임라인 (기존 띠 그래프 그대로) -->
+        <div class="rp-card">
+          <h3>밤 타임라인</h3>
+          <div class="chart" role="img" aria-label="수면 단계 띠 그래프 예시. 깸, REM, 얕은 잠, 깊은 잠이 밤 동안 번갈아 나타나고, REM 구간 두 곳에 완화 보조 표시가 있습니다.">
+            <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <!-- stage rows: W y=18, R y=48, L y=78, D y=108 ; x 20..330 = 23:41..07:29 (468 min) -->
+              <g font-family="Noto Sans KR, sans-serif" font-size="10" fill="#b7b3a8">
+                <text x="0" y="28">깸</text><text x="0" y="58">REM</text><text x="0" y="88">얕은</text><text x="0" y="118">깊은</text>
+              </g>
+              <g stroke="#223052" stroke-width="1">
+                <line x1="20" y1="24" x2="330" y2="24"/><line x1="20" y1="54" x2="330" y2="54"/><line x1="20" y1="84" x2="330" y2="84"/><line x1="20" y1="114" x2="330" y2="114"/>
+              </g>
+              <!-- bands -->
+              <g>
+                <rect x="20"  y="18" width="14" height="12" rx="2" fill="#b7b3a8"/>
+                <rect x="34"  y="78" width="22" height="12" rx="2" fill="#8b85d9"/>
+                <rect x="56"  y="108" width="40" height="12" rx="2" fill="#4f4a9c"/>
+                <rect x="96"  y="78" width="16" height="12" rx="2" fill="#8b85d9"/>
+                <rect x="112" y="48" width="18" height="12" rx="2" fill="#e5d1a0"/>
+                <rect x="130" y="78" width="20" height="12" rx="2" fill="#8b85d9"/>
+                <rect x="150" y="108" width="28" height="12" rx="2" fill="#4f4a9c"/>
+                <rect x="178" y="78" width="14" height="12" rx="2" fill="#8b85d9"/>
+                <rect x="192" y="48" width="30" height="12" rx="2" fill="#e5d1a0"/>
+                <rect x="222" y="78" width="26" height="12" rx="2" fill="#8b85d9"/>
+                <rect x="248" y="18" width="6"  height="12" rx="2" fill="#b7b3a8"/>
+                <rect x="254" y="78" width="22" height="12" rx="2" fill="#8b85d9"/>
+                <rect x="276" y="48" width="38" height="12" rx="2" fill="#e5d1a0"/>
+                <rect x="314" y="78" width="8"  height="12" rx="2" fill="#8b85d9"/>
+                <rect x="322" y="18" width="8"  height="12" rx="2" fill="#b7b3a8"/>
+              </g>
+              <!-- soothe events inside REM -->
+              <g fill="none" stroke="#ece7d9" stroke-width="1.2">
+                <circle cx="206" cy="54" r="5"/><circle cx="296" cy="54" r="5"/>
+              </g>
+              <g fill="#ece7d9"><circle cx="206" cy="54" r="1.6"/><circle cx="296" cy="54" r="1.6"/></g>
+              <!-- time axis -->
+              <g font-family="Noto Sans KR, sans-serif" font-size="10" fill="#b7b3a8" text-anchor="middle">
+                <text x="20" y="140" text-anchor="start">23:41</text><text x="99" y="140">01:40</text><text x="178" y="140">03:40</text><text x="257" y="140">05:40</text><text x="330" y="140" text-anchor="end">07:29</text>
+              </g>
+            </svg>
+          </div>
+          <div class="legend" aria-hidden="true">
+            <span><i style="background:#b7b3a8"></i>깸</span><span><i style="background:#e5d1a0"></i>REM</span><span><i style="background:#8b85d9"></i>얕은 잠</span><span><i style="background:#4f4a9c"></i>깊은 잠</span><span><i style="background:#ece7d9; border-radius:50%"></i>완화 보조</span>
+          </div>
+        </div>
+
+        <!-- 완화 보조 이벤트 (시각 · REM · 세기 — 내용은 기존과 동일) -->
+        <div class="rp-card rp-ev">
+          <h3>완화 보조 <span class="n">2회</span></h3>
+          <div class="r"><div><b>04:21</b> · REM</div><span>부드러운 진동 · 세기 1</span></div>
+          <div class="r"><div><b>06:36</b> · REM</div><span>부드러운 진동 · 세기 1</span></div>
+        </div>
+
+        <!-- 사실 요약 (조언 없음) -->
+        <ul class="rp-facts">
+          <li><b>01</b>REM 구간 4번, 모두 1시간 42분. 완화 보조는 둘 다 REM 안에서만 있었습니다.</li>
+          <li><b>02</b>밤중에 깬 기록 2번, 모두 12분. 완화 보조 뒤에 깬 기록은 없습니다.</li>
         </ul>
 
-        <div class="block">
+        <!-- 아침 피드백 (기존 기능·훅 그대로) -->
+        <div class="rp-card fbk">
           <h3>어젯밤 진동은 어땠나요?</h3>
           <p class="hint">이 답은 내 기기에만 저장되고, 다음 밤 세기를 고를 때 참고하도록 보여 드립니다.</p>
           <div class="fb" id="fb">
